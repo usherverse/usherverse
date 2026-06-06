@@ -40,12 +40,12 @@ export function Hero() {
       {/* Background Video — infinite loop */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
-          src="/hero-video-compressed-v2.mp4"
+          src="/hero-video-1080p.mp4"
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-35 mix-blend-screen"
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-35 mix-blend-screen"
         />
       </div>
 

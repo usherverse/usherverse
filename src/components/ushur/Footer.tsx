@@ -13,7 +13,7 @@ export function Footer() {
           playsInline
           className="w-full h-full object-cover opacity-40"
         >
-          <source src="/footer-video-compressed.mp4" type="video/mp4" />
+          <source src="/footer-video-1080p.mp4" type="video/mp4" />
         </video>
         {/* Dark gradient overlay so text stays readable */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
