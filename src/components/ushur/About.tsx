@@ -2,11 +2,12 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const STATS = [
-  { value: 84, suffix: "+", label: "Projects Completed" },
-  { value: 37, suffix: "+", label: "Systems Built" },
-  { value: 12500, suffix: "h", label: "Hours Saved" },
-  { value: 46, suffix: "+", label: "Businesses Served" },
-  { value: 220, suffix: "+", label: "Automations Created" },
+  { isText: true, text: "Frontend", label: "Development" },
+  { isText: true, text: "Responsive", label: "Design" },
+  { isText: true, text: "API", label: "Integration" },
+  { isText: true, text: "UI/UX", label: "Prototyping" },
+  { isText: false, value: 300, suffix: "+", label: "Cups of Coffee" },
+  { isText: false, value: 50, suffix: "+", label: "Late Nights Coded" },
 ];
 
 function Count({ to, suffix }: { to: number; suffix: string }) {
@@ -30,12 +31,18 @@ function Count({ to, suffix }: { to: number; suffix: string }) {
 
 export function About() {
   return (
-    <section id="about" className="relative py-32 px-6 md:px-12">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-16">
+    <section id="about" className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+      <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
+        <div 
+          className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
+          style={{ backgroundImage: "url('/1.jpg')" }}
+        />
+      </div>
+      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">02</span>
-          <span className="w-12 h-px bg-[var(--ink)]" />
-          <span>The Studio</span>
+          <span className="w-12 h-px bg-white/30" />
+          <span className="text-white drop-shadow-md">The Studio</span>
         </div>
 
         <div className="grid md:grid-cols-12 gap-12">
@@ -45,16 +52,16 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1, ease: [0.6, 0.05, 0.1, 1] }}
-              className="font-display font-light text-[7vw] md:text-[5vw] leading-[0.95] tracking-[-0.02em] text-balance"
+              className="font-display font-light text-[7vw] md:text-[5vw] leading-[0.95] tracking-[-0.02em] text-balance text-white drop-shadow-lg"
             >
-              I build <em className="text-[var(--champagne)]">technology</em> that works for people —
-              <span className="text-[var(--muted-foreground)]"> systems that quietly do the heavy lifting.</span>
+              I build <em className="text-[var(--champagne)] drop-shadow-none">technology</em> that works for people —
+              <span className="text-white/70"> systems that quietly do the heavy lifting.</span>
             </motion.h2>
           </div>
 
           <div className="md:col-span-5 md:pt-6 space-y-8 text-[var(--muted-foreground)] leading-relaxed">
             <p className="text-base">
-              Ushurverse is a one-person studio practicing at the intersection of design,
+              Usherverse is a one-person studio practicing at the intersection of design,
               engineering, and operations. The mandate is simple: take what's manual,
               fragmented, and slow, and rebuild it as something quiet, fast, and inevitable.
             </p>
@@ -76,7 +83,7 @@ export function About() {
           </div>
         </div>
 
-        <div className="mt-32 grid grid-cols-2 md:grid-cols-5 gap-px bg-[var(--border)] border border-[var(--border)]">
+        <div className="mt-32 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md">
           {STATS.map((s, i) => (
             <motion.div
               key={i}
@@ -84,12 +91,12 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.08 }}
-              className="bg-[var(--background)] p-8 group hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500"
+              className="bg-black/30 p-8 group hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500 flex flex-col justify-center text-white"
             >
-              <div className="font-display text-5xl md:text-6xl font-light tracking-tight">
-                <Count to={s.value} suffix={s.suffix} />
+              <div className={`font-display font-light tracking-tight drop-shadow-md ${s.isText ? 'text-2xl md:text-3xl' : 'text-4xl md:text-5xl'}`}>
+                {s.isText ? s.text : <Count to={s.value as number} suffix={s.suffix as string} />}
               </div>
-              <div className="mt-4 text-[10px] uppercase tracking-[0.25em] text-[var(--muted-foreground)] group-hover:text-[var(--bone)]/60">
+              <div className="mt-4 text-[10px] uppercase tracking-[0.25em] text-white/60 group-hover:text-[var(--bone)]/60">
                 {s.label}
               </div>
             </motion.div>

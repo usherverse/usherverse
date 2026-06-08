@@ -1,12 +1,35 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 export function Footer() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "300px 0px", threshold: 0 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
   return (
     <footer className="relative text-[var(--foreground)] overflow-hidden bg-black">
 
       {/* Background video */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
@@ -30,7 +53,6 @@ export function Footer() {
           <div className="md:col-span-3">
             <div className="text-xs uppercase tracking-[0.3em] text-[var(--foreground)]/50 mb-4">Sitemap</div>
             <ul className="space-y-2 font-display text-xl">
-              <li><a href="#work" className="hover:text-[var(--champagne)] transition-colors">Work</a></li>
               <li><a href="#services" className="hover:text-[var(--champagne)] transition-colors">Services</a></li>
               <li><a href="#process" className="hover:text-[var(--champagne)] transition-colors">Process</a></li>
               <li><a href="#about" className="hover:text-[var(--champagne)] transition-colors">About</a></li>
@@ -40,17 +62,22 @@ export function Footer() {
           <div className="md:col-span-4">
             <div className="text-xs uppercase tracking-[0.3em] text-[var(--foreground)]/50 mb-4">Elsewhere</div>
             <ul className="space-y-2 font-display text-xl">
-              {["LinkedIn", "GitHub", "Behance", "Instagram", "Dribbble"].map((s) => (
-                <li key={s}>
-                  <a href="#" className="group inline-flex items-center gap-3 hover:text-[var(--champagne)] transition-colors">
-                    {s} <span className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">↗</span>
+              {[
+                { name: "WhatsApp", url: "https://wa.me/254110000284" },
+                { name: "X (Twitter)", url: "https://x.com/Usherverse_" },
+                { name: "TikTok", url: "https://www.tiktok.com/@usherverse_" },
+                { name: "Instagram", url: "https://www.instagram.com/usherverse_/" }
+              ].map((s) => (
+                <li key={s.name}>
+                  <a href={s.url} target={s.url !== "#" ? "_blank" : undefined} rel="noreferrer" className="group inline-flex items-center gap-3 hover:text-[var(--champagne)] transition-colors">
+                    {s.name} <span className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">↗</span>
                   </a>
                 </li>
               ))}
             </ul>
             <div className="mt-8 space-y-1 text-sm text-[var(--foreground)]/60">
               <div>0110 000 284</div>
-              <div>ushurverse@gmail.com</div>
+              <div>usherverse@gmail.com</div>
             </div>
           </div>
         </div>
@@ -63,12 +90,12 @@ export function Footer() {
           className="py-12 select-none"
         >
           <div className="font-display font-light text-[18vw] leading-[0.85] tracking-[-0.04em]">
-            Ushurverse<span className="text-[var(--champagne)]">.</span>
+            Usherverse<span className="text-[var(--champagne)]">.</span>
           </div>
         </motion.div>
 
         <div className="flex flex-wrap justify-between items-center gap-4 pt-8 border-t border-[var(--foreground)]/15 text-xs uppercase tracking-[0.3em] text-[var(--foreground)]/50">
-          <div>© 2026 Ushurverse — All rights reserved</div>
+          <div>© 2026 Usherverse — All rights reserved</div>
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[var(--champagne)] animate-pulse" />
             Available for new engagements

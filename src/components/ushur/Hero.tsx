@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SLIDES = [
   { tag: "Website Development", num: "01" },
@@ -25,6 +25,27 @@ const TRANSITIONS = [
 export function Hero() {
   const [i, setI] = useState(0);
   const [t, setT] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     const id = setInterval(() => {
       setI((p) => (p + 1) % SLIDES.length);
@@ -40,7 +61,8 @@ export function Hero() {
       {/* Background Video — infinite loop */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
-          src="/hero-video-1080p.mp4"
+          ref={videoRef}
+          src="/hero-video-1080p-loop2.mp4"
           autoPlay
           loop
           muted
@@ -74,7 +96,7 @@ export function Hero() {
         <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-12">
           <span className="w-12 h-px bg-[var(--ink)]" />
           <span>Big Little World</span>
-          <span className="text-[var(--champagne)]">— Est. Ushurverse</span>
+          <span className="text-[var(--champagne)]">— Est. Usherverse</span>
         </div>
 
         <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.03em] text-balance max-w-[1400px]">
@@ -103,9 +125,6 @@ export function Hero() {
             <a href="#contact" className="group inline-flex items-center justify-center gap-3 bg-[var(--ink)] text-[var(--bone)] px-8 py-5 text-xs uppercase tracking-[0.3em] hover:bg-[var(--champagne)] hover:text-[var(--ink)] transition-all duration-500">
               Let's build something
               <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </a>
-            <a href="#work" className="group inline-flex items-center justify-center gap-3 border border-[var(--ink)] text-[var(--ink)] px-8 py-5 text-xs uppercase tracking-[0.3em] hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-all duration-500">
-              View my work
             </a>
           </motion.div>
         </div>

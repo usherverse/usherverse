@@ -138,19 +138,25 @@ function StackGroup({ g, i }: { g: typeof GROUPS[0]; i: number }) {
 
 export function Stack() {
   return (
-    <section className="relative py-32 px-6 md:px-12 bg-[var(--background)]">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-16">
+    <section className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+      <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
+        <div 
+          className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
+          style={{ backgroundImage: "url('/5.jpg')" }}
+        />
+      </div>
+      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">06</span>
-          <span className="w-12 h-px bg-[var(--ink)]" />
-          <span>Instruments</span>
+          <span className="w-12 h-px bg-white/30" />
+          <span className="text-white drop-shadow-md">Instruments</span>
         </div>
 
         <div className="grid md:grid-cols-12 gap-12 mb-20">
-          <h2 className="md:col-span-7 font-display font-light text-[8vw] md:text-[5vw] leading-[0.95] tracking-[-0.02em]">
-            Tools are<br /><em className="text-[var(--champagne)]">vocabulary.</em>
+          <h2 className="md:col-span-7 font-display font-light text-[8vw] md:text-[5vw] leading-[0.95] tracking-[-0.02em] text-white drop-shadow-lg">
+            Tools are<br /><em className="text-[var(--champagne)] drop-shadow-none">vocabulary.</em>
           </h2>
-          <p className="md:col-span-5 md:pt-4 text-[var(--muted-foreground)] leading-relaxed">
+          <p className="md:col-span-5 md:pt-4 text-white/70 leading-relaxed drop-shadow-md">
             A curated stack chosen for ergonomics, longevity, and the ability to ship without
             apologising. The work, not the tooling, is the point.
           </p>

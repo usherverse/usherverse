@@ -17,28 +17,34 @@ export function Work() {
   const items = f === "All" ? PROJECTS : PROJECTS.filter((p) => p.tag === f);
 
   return (
-    <section id="work" className="relative py-32 px-6 md:px-12">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-16">
+    <section id="work" className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+      <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
+        <div 
+          className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
+          style={{ backgroundImage: "url('/4.jpg')" }}
+        />
+      </div>
+      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">04</span>
-          <span className="w-12 h-px bg-[var(--ink)]" />
-          <span>Selected Work</span>
+          <span className="w-12 h-px bg-white/30" />
+          <span className="text-white drop-shadow-md">Selected Work</span>
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-8 mb-16">
-          <h2 className="font-display font-light text-[8vw] md:text-[6vw] leading-[0.95] tracking-[-0.02em]">
+          <h2 className="font-display font-light text-[8vw] md:text-[6vw] leading-[0.95] tracking-[-0.02em] text-white drop-shadow-lg">
             A small archive of<br />
-            <em>quiet, decisive work.</em>
+            <em className="text-[var(--champagne)] drop-shadow-none">quiet, decisive work.</em>
           </h2>
           <div className="flex flex-wrap gap-2">
             {FILTERS.map((x) => (
               <button
                 key={x}
                 onClick={() => setF(x)}
-                className={`px-4 py-2 text-xs uppercase tracking-[0.25em] border transition-all duration-300 ${
+                className={`px-4 py-2 text-xs uppercase tracking-[0.25em] border transition-all duration-300 drop-shadow-md ${
                   f === x
                     ? "bg-[var(--ink)] text-[var(--bone)] border-[var(--ink)]"
-                    : "border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--ink)] hover:text-[var(--ink)]"
+                    : "border-white/30 text-white/70 hover:border-white hover:text-white bg-black/20"
                 }`}
               >
                 {x}
@@ -74,10 +80,10 @@ export function Work() {
                 </div>
               </div>
               <div className="flex items-end justify-between mt-6">
-                <h3 className="font-display text-3xl md:text-4xl font-light tracking-tight">
+                <h3 className="font-display text-3xl md:text-4xl font-light tracking-tight drop-shadow-md">
                   {p.title}
                 </h3>
-                <span className="text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] group-hover:text-[var(--champagne)] transition-colors">
+                <span className="text-xs uppercase tracking-[0.3em] text-white/60 group-hover:text-[var(--champagne)] transition-colors drop-shadow-md">
                   Case study →
                 </span>
               </div>

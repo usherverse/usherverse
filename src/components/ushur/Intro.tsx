@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const LETTERS = "USHURVERSE".split("");
+const LETTERS = "USHERVERSE".split("");
 
 export function Intro({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<"spread" | "converge" | "scatter" | "exit">("spread");
@@ -76,7 +76,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
             transition={{ duration: 1.4 }}
             className="absolute top-8 left-8 text-xs tracking-[0.4em] uppercase"
           >
-            Ushurverse — 2026
+            Usherverse — 2026
           </motion.div>
           <motion.div
             initial={{ opacity: 0 }}

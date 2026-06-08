@@ -8,20 +8,26 @@ const C = [
 
 export function Why() {
   return (
-    <section className="relative py-32 px-6 md:px-12">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-16">
+    <section className="relative py-32 px-6 md:px-12 [clip-path:inset(0)] transform-gpu">
+      <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
+        <div 
+          className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
+          style={{ backgroundImage: "url('/three disciplines.jpg')" }}
+        />
+      </div>
+      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">08</span>
-          <span className="w-12 h-px bg-[var(--ink)]" />
-          <span>Why Work With Me</span>
+          <span className="w-12 h-px bg-white/30" />
+          <span className="text-white drop-shadow-md">Why Work With Me</span>
         </div>
 
-        <h2 className="font-display font-light text-[8vw] md:text-[5.5vw] leading-[0.95] tracking-[-0.02em] mb-20 max-w-5xl">
+        <h2 className="font-display font-light text-[8vw] md:text-[5.5vw] leading-[0.95] tracking-[-0.02em] mb-20 max-w-5xl text-white drop-shadow-lg">
           Three disciplines.<br />
-          <em className="text-[var(--champagne)]">One operator.</em>
+          <em className="text-[var(--champagne)] drop-shadow-none">One operator.</em>
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-px bg-[var(--border)] border border-[var(--border)]">
+        <div className="grid md:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md">
           {C.map((c, i) => (
             <motion.div
               key={c.n}
@@ -29,11 +35,11 @@ export function Why() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.1 }}
-              className="bg-[var(--background)] p-12 min-h-[380px] flex flex-col group hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500"
+              className="bg-black/30 p-12 min-h-[380px] flex flex-col group hover:bg-neutral-200 hover:text-[var(--bone)] transition-colors duration-500"
             >
-              <div className="font-display text-7xl text-[var(--champagne)] italic mb-12">{c.n}</div>
-              <h3 className="font-display text-3xl md:text-4xl font-light mb-6">{c.t}</h3>
-              <p className="text-[var(--muted-foreground)] group-hover:text-[var(--bone)]/70 leading-relaxed mt-auto">
+              <div className="font-display text-7xl text-[var(--champagne)] italic mb-12 drop-shadow-md">{c.n}</div>
+              <h3 className="font-display text-3xl md:text-4xl font-light mb-6 text-white group-hover:text-[var(--champagne)] drop-shadow-sm transition-colors duration-500">{c.t}</h3>
+              <p className="text-white/70 group-hover:text-neutral-600 leading-relaxed mt-auto transition-colors duration-500">
                 {c.d}
               </p>
             </motion.div>

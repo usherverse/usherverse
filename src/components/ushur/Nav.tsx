@@ -2,10 +2,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const LINKS = [
-  { label: "Work", href: "#work" },
+  { label: "Home", href: "#top" },
+  { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
-  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -15,7 +15,8 @@ export function Nav() {
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
-    fn(); window.addEventListener("scroll", fn);
+    fn(); 
+    window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
@@ -40,7 +41,7 @@ export function Nav() {
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
           <a href="#top" className="font-display text-xl tracking-tight z-50 relative">
-            Ushurverse<span className="text-[var(--champagne)]">.</span>
+            Usherverse<span className="text-[var(--champagne)]">.</span>
           </a>
 
           {/* Desktop nav */}
@@ -96,8 +97,13 @@ export function Nav() {
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.6, 0.05, 0.1, 1] }}
-            className="fixed inset-0 z-40 bg-[var(--background)] flex flex-col px-6 pt-32 pb-12"
+            className="fixed inset-0 z-40 flex flex-col px-6 pt-32 pb-12 bg-[var(--background)]"
           >
+            {/* Background Image with overlay for readability */}
+            <div 
+              className="absolute inset-0 -z-10 opacity-30 mix-blend-screen bg-cover bg-center"
+              style={{ backgroundImage: "url('/menu.jpg')" }}
+            />
             {/* Nav links */}
             <nav className="flex flex-col gap-0 flex-1">
               {LINKS.map((l, i) => (
@@ -140,7 +146,7 @@ export function Nav() {
               transition={{ delay: 0.6 }}
               className="mt-6 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)]"
             >
-              Ushurverse — 2026
+              Usherverse — 2026
             </motion.p>
           </motion.div>
         )}

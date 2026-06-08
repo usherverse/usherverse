@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const LETTERS = "USHURVERSE".split("");
+const LETTERS = "USHERVERSE".split("");
 
 export function HeroLogoReveal({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<"spread" | "converge" | "scatter" | "exit">("spread");
@@ -50,7 +50,7 @@ export function HeroLogoReveal({ onDone }: { onDone: () => void }) {
           className="absolute inset-0 z-[5] flex items-center justify-center pointer-events-none"
         >
           <div className="flex flex-col items-center gap-5">
-            {/* Bold USHURVERSE on clean dark background */}
+            {/* Bold USHERVERSE on clean dark background */}
             <div className="flex font-display text-[14vw] md:text-[10vw] leading-none font-light text-white">
               {LETTERS.map((l, i) => (
                 <motion.span

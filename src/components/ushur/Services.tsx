@@ -41,27 +41,33 @@ const SERVICES = [
 
 export function Services() {
   return (
-    <section id="services" className="relative py-32 px-6 md:px-12 bg-[var(--background)] text-[var(--foreground)]">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--foreground)]/60 mb-16">
+    <section id="services" className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+      <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
+        <div 
+          className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
+          style={{ backgroundImage: "url('/2.jpg')" }}
+        />
+      </div>
+      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">03</span>
-          <span className="w-12 h-px bg-[var(--foreground)]/40" />
-          <span>Capabilities</span>
+          <span className="w-12 h-px bg-white/30" />
+          <span className="text-white drop-shadow-md">Capabilities</span>
         </div>
 
         <div className="grid md:grid-cols-12 gap-12 mb-24">
-          <h2 className="md:col-span-8 font-display font-light text-[8vw] md:text-[5.5vw] leading-[0.95] tracking-[-0.02em]">
+          <h2 className="md:col-span-8 font-display font-light text-[8vw] md:text-[5.5vw] leading-[0.95] tracking-[-0.02em] text-white drop-shadow-lg">
             A studio that<br />
-            <em className="text-[var(--champagne)]">designs, ships</em><br />
+            <em className="text-[var(--champagne)] drop-shadow-none">designs, ships</em><br />
             and automates.
           </h2>
-          <p className="md:col-span-4 md:pt-6 text-[var(--foreground)]/60 leading-relaxed">
+          <p className="md:col-span-4 md:pt-6 text-white/70 leading-relaxed drop-shadow-md">
             Six disciplines. One operator. Every engagement combines strategy, design,
             development and automation into a single, accountable practice.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--foreground)]/10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md">
           {SERVICES.map((s, i) => (
             <motion.article
               key={s.num}
@@ -69,19 +75,19 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: (i % 3) * 0.1 }}
-              className="bg-[var(--background)] p-10 group relative overflow-hidden cursor-pointer min-h-[420px] flex flex-col"
+              className="bg-black/30 p-10 group relative overflow-hidden cursor-pointer min-h-[420px] flex flex-col hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500"
             >
               <div className="flex items-start justify-between mb-12">
                 <span className="text-xs tracking-[0.3em] text-[var(--champagne)]">{s.num}</span>
                 <span className="text-2xl opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all duration-500">→</span>
               </div>
-              <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4 group-hover:translate-x-2 transition-transform duration-500">
+              <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4 group-hover:translate-x-2 transition-transform duration-500 drop-shadow-md">
                 {s.title}
               </h3>
-              <p className="text-[var(--foreground)]/60 mb-8 leading-relaxed">{s.desc}</p>
-              <ul className="mt-auto space-y-2 text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/70">
+              <p className="text-white/70 group-hover:text-[var(--bone)]/80 mb-8 leading-relaxed transition-colors duration-500">{s.desc}</p>
+              <ul className="mt-auto space-y-2 text-xs uppercase tracking-[0.2em] text-white/80 group-hover:text-[var(--bone)] transition-colors duration-500">
                 {s.items.map((it) => (
-                  <li key={it} className="flex items-center gap-3 border-t border-[var(--foreground)]/10 pt-2">
+                  <li key={it} className="flex items-center gap-3 border-t border-white/10 group-hover:border-[var(--bone)]/20 pt-2 transition-colors duration-500">
                     <span className="text-[var(--champagne)]">—</span>{it}
                   </li>
                 ))}
