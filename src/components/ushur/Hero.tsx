@@ -43,7 +43,7 @@ export function Hero() {
       {/* Background Video */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
-          src="/hero-video-1080p-loop2.mp4"
+          src="/footer-video-1080p.mp4"
           autoPlay
           loop
           muted
