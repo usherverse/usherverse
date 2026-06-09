@@ -142,15 +142,17 @@ function RootComponent() {
       touchMultiplier: 1.5,
     });
 
-    const updateLenis = (frameData: { timestamp: number }) => {
-      lenis.raf(frameData.timestamp);
-    };
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
 
-    frame.update(updateLenis, true);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
       lenis.destroy();
-      cancelFrame(updateLenis);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
