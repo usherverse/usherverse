@@ -40,10 +40,9 @@ export function Hero() {
 
   return (
     <section id="top" className="relative isolate min-h-screen pt-32 pb-20 px-6 md:px-12 overflow-hidden">
-      {/* Background Video — commented out to reduce page weight (8.2 MB) */}
-      {/* <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
+      {/* Background Video */}
+      <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
-          ref={videoRef}
           src="/hero-video-1080p-loop2.mp4"
           autoPlay
           loop
@@ -51,7 +50,7 @@ export function Hero() {
           playsInline
           className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-35 mix-blend-screen"
         />
-      </div> */}
+      </div>
 
       {/* slideshow backdrop */}
       <div className="absolute inset-0 -z-10">

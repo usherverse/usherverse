@@ -5,10 +5,9 @@ export function Footer() {
   return (
     <footer className="relative text-[var(--foreground)] overflow-hidden bg-black">
 
-      {/* Background video — commented out to reduce page weight (2.3 MB) */}
-      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background video */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
-          ref={videoRef}
           autoPlay
           loop
           muted
@@ -18,7 +17,7 @@ export function Footer() {
           <source src="/footer-video-1080p.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
-      </div> */}
+      </div>
 
       <div className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-12 pt-24 pb-10">
         <div className="grid md:grid-cols-12 gap-12 pb-20 border-b border-[var(--foreground)]/15">
