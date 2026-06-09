@@ -80,7 +80,7 @@ export function Footer() {
             <span className="w-2 h-2 rounded-full bg-[var(--champagne)] animate-pulse" />
             Available for new engagements
           </div>
-          <div>Crafted in Nairobi</div>
+          <div>&#169; Made in the Usherverse</div>
         </div>
       </div>
     </footer>
