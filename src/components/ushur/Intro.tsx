@@ -10,25 +10,17 @@ export function Intro({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<"spread" | "converge" | "scatter" | "exit">("spread");
 
   useEffect(() => {
-    // If the user has already seen the intro this session, skip immediately
-    if (sessionStorage.getItem(HAS_SEEN_KEY)) {
-      onDone();
-      return;
-    }
-
-    // Optimised timeline — total: ~3.2 s (was 6.3 s)
     //  0 ms  → spread  (initial state, letters fanned out)
-    //  400ms → converge (fly in faster)
-    // 1800ms → scatter  (shorter hold — title is legible, then out)
-    // 2600ms → exit     (fade overlay)
-    // 3200ms → done     (hand off to Hero)
-    const t1 = setTimeout(() => setPhase("converge"), 400);
-    const t2 = setTimeout(() => setPhase("scatter"),  1800);
-    const t3 = setTimeout(() => setPhase("exit"),     2600);
+    //  600ms → converge (fly in faster)
+    // 2800ms → scatter  (shorter hold — title is legible, then out)
+    // 3600ms → exit     (fade overlay)
+    // 4200ms → done     (hand off to Hero)
+    const t1 = setTimeout(() => setPhase("converge"), 600);
+    const t2 = setTimeout(() => setPhase("scatter"),  2800);
+    const t3 = setTimeout(() => setPhase("exit"),     3600);
     const t4 = setTimeout(() => {
-      sessionStorage.setItem(HAS_SEEN_KEY, "1");
       onDone();
-    }, 3200);
+    }, 4200);
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [onDone]);
@@ -116,7 +108,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 2.6, ease: "linear" }}
+            transition={{ duration: 3.6, ease: "linear" }}
             className="absolute bottom-0 left-0 h-px w-full bg-[var(--champagne)] origin-left"
             style={{ willChange: "transform" }}
           />
