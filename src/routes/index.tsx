@@ -13,6 +13,7 @@ import { Blog } from "@/components/ushur/Blog";
 import { Why } from "@/components/ushur/Why";
 import { Contact } from "@/components/ushur/Contact";
 import { Footer } from "@/components/ushur/Footer";
+import { LazySection } from "@/components/ushur/LazySection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,17 +39,45 @@ function Index() {
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}
       <div className="relative bg-[var(--background)] text-[var(--foreground)]">
         <Nav />
+        {/* Hero is always rendered — it's above the fold */}
         <Hero />
-        <About />
-        <Services />
-        {/* <Work /> */}
-        <Process />
-        {/* <Marquee /> */}
-        <Stack />
-        <Why />
-        <Blog />
-        <Contact />
-        <Footer />
+
+        {/* Every section below the fold is lazy — only mounts when near viewport */}
+        <LazySection minHeight="600px">
+          <About />
+        </LazySection>
+
+        <LazySection minHeight="600px">
+          <Services />
+        </LazySection>
+
+        {/* <LazySection minHeight="600px"><Work /></LazySection> */}
+
+        <LazySection minHeight="500px">
+          <Process />
+        </LazySection>
+
+        {/* <LazySection minHeight="120px"><Marquee /></LazySection> */}
+
+        <LazySection minHeight="700px">
+          <Stack />
+        </LazySection>
+
+        <LazySection minHeight="400px">
+          <Why />
+        </LazySection>
+
+        <LazySection minHeight="600px">
+          <Blog />
+        </LazySection>
+
+        <LazySection minHeight="500px">
+          <Contact />
+        </LazySection>
+
+        <LazySection minHeight="200px">
+          <Footer />
+        </LazySection>
       </div>
     </>
   );
