@@ -79,14 +79,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Usherverse | Big Little World" },
+      { name: "description", content: "Usherverse is a creative agency focusing on cutting-edge design and development. Big Little World." },
+      { name: "keywords", content: "usherverse, design, development, creative agency, big little world" },
+      { name: "author", content: "Usherverse" },
+      { property: "og:title", content: "Usherverse | Big Little World" },
+      { property: "og:description", content: "Usherverse is a creative agency focusing on cutting-edge design and development. Big Little World." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@usherverse" },
     ],
     links: [
       {
