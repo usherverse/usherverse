@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
+import { useVideoPause } from "@/hooks/use-video-pause";
 
 export function Footer() {
+  const videoRef = useVideoPause();
   // Video commented out — re-enable by restoring the useRef/useEffect and <video> block below
   return (
     <footer className="relative text-[var(--foreground)] overflow-hidden bg-black">
@@ -8,6 +10,7 @@ export function Footer() {
       {/* Background video */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted

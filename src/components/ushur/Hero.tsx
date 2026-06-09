@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useVideoPause } from "@/hooks/use-video-pause";
 
 const SLIDES = [
   { tag: "Website Development", num: "01" },
@@ -25,6 +26,7 @@ const TRANSITIONS = [
 export function Hero() {
   const [i, setI] = useState(0);
   const [t, setT] = useState(0);
+  const videoRef = useVideoPause();
 
   // Video commented out — re-enable by uncommenting the <video> block below
   // and restoring: import { useRef } from "react" + the videoRef/observer useEffect
@@ -43,6 +45,7 @@ export function Hero() {
       {/* Background Video */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
+          ref={videoRef}
           src="/footer-video-1080p.mp4"
           autoPlay
           loop
