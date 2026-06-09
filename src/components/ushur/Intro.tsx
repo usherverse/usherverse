@@ -44,9 +44,9 @@ export function Intro({ onDone }: { onDone: () => void }) {
     return                                             { opacity: 0,    y: 6 };
   };
 
-  const getSubtitleTransition = () => {
+  const getSubtitleTransition = (wIndex: number = 0) => {
     if (phase === "scatter") return { duration: 0.4, ease: [0.6, 0.05, 0.1, 1] as const };
-    return                          { duration: 0.6, delay: 0.7, ease: [0.25, 0.1, 0.25, 1] as const };
+    return                          { duration: 0.6, delay: 0.5 + wIndex * 0.15, ease: [0.25, 0.1, 0.25, 1] as const };
   };
 
   return (
@@ -93,15 +93,23 @@ export function Intro({ onDone }: { onDone: () => void }) {
               ))}
             </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 6 }}
-              animate={getSubtitleAnimate()}
-              transition={getSubtitleTransition()}
-              className="text-[10px] md:text-xs uppercase font-sans text-[var(--champagne)]"
-              style={{ letterSpacing: "0.55em", willChange: "transform, opacity" }}
+            <div
+              className="text-[10px] md:text-xs uppercase font-sans text-[var(--champagne)] flex gap-[1em]"
+              style={{ letterSpacing: "0.55em" }}
             >
-              Big Little World
-            </motion.p>
+              {["Big", "Little", "World"].map((word, wIndex) => (
+                <motion.span
+                  key={wIndex}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={getSubtitleAnimate()}
+                  transition={getSubtitleTransition(wIndex)}
+                  style={{ willChange: "transform, opacity" }}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </div>
           </div>
 
           {/* Progress bar at bottom */}
