@@ -8,6 +8,7 @@ interface LazySectionProps {
   /** How far before it enters the viewport to start loading (default 200px) */
   rootMargin?: string;
   className?: string;
+  id?: string;
 }
 
 /**
@@ -20,12 +21,14 @@ export function LazySection({
   minHeight = "1px",
   rootMargin = "200px",
   className,
+  id,
 }: LazySectionProps) {
   const [ref, isVisible] = useLazySection(rootMargin);
 
   return (
     <div
       ref={ref}
+      id={id}
       style={{ minHeight: isVisible ? undefined : minHeight }}
       className={className}
     >

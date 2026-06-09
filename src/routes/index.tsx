@@ -43,17 +43,17 @@ function Index() {
         <Hero />
 
         {/* Every section below the fold is lazy — only mounts when near viewport */}
-        <LazySection minHeight="600px">
+        <LazySection minHeight="600px" id="about">
           <About />
         </LazySection>
 
-        <LazySection minHeight="600px">
+        <LazySection minHeight="600px" id="services">
           <Services />
         </LazySection>
 
         {/* <LazySection minHeight="600px"><Work /></LazySection> */}
 
-        <LazySection minHeight="500px">
+        <LazySection minHeight="500px" id="process">
           <Process />
         </LazySection>
 
@@ -71,7 +71,7 @@ function Index() {
           <Blog />
         </LazySection>
 
-        <LazySection minHeight="500px">
+        <LazySection minHeight="500px" id="contact">
           <Contact />
         </LazySection>
 

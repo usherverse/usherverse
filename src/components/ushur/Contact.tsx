@@ -4,7 +4,7 @@ import { useState } from "react";
 export function Contact() {
   const [sent, setSent] = useState(false);
   return (
-    <section id="contact" className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+    <section className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
       <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
         <div 
           className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"

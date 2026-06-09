@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useLazyBg } from "@/hooks/use-lazy-bg";
 
 const STATS = [
   { isText: true, text: "Frontend", label: "Development" },
@@ -30,16 +31,18 @@ function Count({ to, suffix }: { to: number; suffix: string }) {
 }
 
 export function About() {
+  const [bgRef, bgStyle] = useLazyBg('/1.webp');
   return (
-    <section id="about" className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
+    <section className="relative py-32 px-6 md:px-12 text-white [clip-path:inset(0)] transform-gpu">
       <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
         <div 
+          ref={bgRef}
           className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
-          style={{ backgroundImage: "url('/1.webp')" }}
+          style={bgStyle}
         />
       </div>
       <div 
-        className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu will-change-transform"
+        className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-md bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu will-change-transform"
         style={{ willChange: "transform, backdrop-filter" }}
       >
         <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
