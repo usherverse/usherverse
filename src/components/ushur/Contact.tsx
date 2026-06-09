@@ -81,7 +81,7 @@ export function Contact() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-px">
                   <Field label="Project Type" name="type" placeholder="Website / System / Automation" />
-                  <Field label="Budget Range" name="budget" placeholder="USD 5k — 50k+" />
+                  <Field label="Budget Range" name="budget" placeholder="" />
                 </div>
                 <div className="bg-black/30 p-6">
                   <label className="block text-[10px] uppercase tracking-[0.3em] text-white/60 mb-3">Project Description</label>
