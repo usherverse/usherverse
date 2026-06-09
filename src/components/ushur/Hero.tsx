@@ -75,16 +75,16 @@ export function Hero() {
       </div>
 
       <div className="max-w-[1600px] mx-auto h-full">
-        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] mb-12">
+        <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-12">
           <span className="w-12 h-px bg-[var(--ink)]" />
           <span>Big Little World</span>
           <span className="text-[var(--champagne)]">— Est. Usherverse</span>
         </div>
 
-        <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.03em] text-balance max-w-[1400px]">
+        <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.03em] text-balance max-w-[1400px] text-white">
           I build websites,<br />
           <span className="italic">systems</span> &amp; automations<br />
-          <span className="text-[var(--foreground)]/70">that eliminate </span>
+          <span className="text-white/70">that eliminate </span>
           <span className="italic text-[var(--champagne)]">repetitive work.</span>
         </h1>
 
@@ -93,7 +93,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="max-w-md text-base text-[var(--muted-foreground)] leading-relaxed"
+            className="max-w-md text-base text-white/60 leading-relaxed"
           >
             Helping businesses streamline operations, automate workflows, and create digital experiences that drive growth.
           </motion.p>
@@ -115,7 +115,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.6 }}
-          className="mt-20 flex items-center justify-between border-t border-[var(--border)] pt-6"
+          className="mt-20 flex items-center justify-between border-t border-white/15 pt-6"
         >
           <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em]">
             <span className="text-[var(--champagne)]">{SLIDES[i].num}</span>
@@ -133,7 +133,7 @@ export function Hero() {
               </motion.span>
             </AnimatePresence>
           </div>
-          <div className="text-xs uppercase tracking-[0.3em] text-[var(--muted-foreground)] hidden md:block">
+          <div className="text-xs uppercase tracking-[0.3em] text-white/50 hidden md:block">
             Scroll ↓
           </div>
         </motion.div>
