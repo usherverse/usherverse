@@ -48,8 +48,9 @@ export function Hero() {
           loop
           muted
           playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-35 mix-blend-screen"
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-40"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
       </div>
 
       {/* slideshow backdrop */}
