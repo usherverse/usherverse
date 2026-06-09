@@ -65,7 +65,7 @@ export function About() {
             </motion.h2>
           </div>
 
-          <div className="md:col-span-5 md:pt-6 space-y-8 text-[var(--muted-foreground)] leading-relaxed">
+          <div className="md:col-span-5 md:pt-6 space-y-8 text-white/80 leading-relaxed">
             <p className="text-base">
               Usherverse is a one-person studio practicing at the intersection of design,
               engineering, and operations. The mandate is simple: take what's manual,
@@ -76,7 +76,7 @@ export function About() {
               for founders, agencies, and operators across industries — always with a bias
               toward clarity, performance, and the kind of polish that earns trust.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-4 text-xs uppercase tracking-[0.2em] text-[var(--ink)]">
+            <div className="grid grid-cols-2 gap-6 pt-4 text-xs uppercase tracking-[0.2em] text-white/70">
               <div>
                 <div className="text-[var(--champagne)] mb-2">Philosophy</div>
                 Less surface, more system.

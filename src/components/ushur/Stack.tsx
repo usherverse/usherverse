@@ -110,10 +110,10 @@ function StackGroup({ g, i }: { g: typeof GROUPS[0]; i: number }) {
               />
               <it.icon 
                 size={34} 
-                className="transition-all duration-500 text-[var(--foreground)]/40 relative z-10 group-hover:scale-110"
+                className="transition-all duration-500 text-white/70 relative z-10 group-hover:scale-110"
               />
             </div>
-            <span className="text-[11px] font-medium tracking-widest uppercase text-[var(--foreground)]/40 group-hover:text-[var(--foreground)] transition-colors duration-300 text-center">
+            <span className="text-[11px] font-medium tracking-widest uppercase text-white/75 group-hover:text-white transition-colors duration-300 text-center">
               {it.name}
             </span>
           </div>
