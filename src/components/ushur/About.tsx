@@ -38,7 +38,10 @@ export function About() {
           style={{ backgroundImage: "url('/1.webp')" }}
         />
       </div>
-      <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
+      <div 
+        className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu will-change-transform"
+        style={{ willChange: "transform, backdrop-filter" }}
+      >
         <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">02</span>
           <span className="w-12 h-px bg-white/30" />
@@ -83,7 +86,10 @@ export function About() {
           </div>
         </div>
 
-        <div className="mt-32 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md">
+        <div 
+          className="mt-32 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md transform-gpu will-change-transform"
+          style={{ willChange: "transform, backdrop-filter" }}
+        >
           {STATS.map((s, i) => (
             <motion.div
               key={i}

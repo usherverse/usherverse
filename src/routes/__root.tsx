@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import Lenis from "lenis";
+import { frame, cancelFrame } from "framer-motion";
 
 function NotFoundComponent() {
   return (
@@ -141,17 +142,15 @@ function RootComponent() {
       touchMultiplier: 1.5,
     });
 
-    let rafId: number;
-    function raf(time: number) {
+    const updateLenis = (time: number) => {
       lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
+    };
 
-    rafId = requestAnimationFrame(raf);
+    frame.update(updateLenis, true);
 
     return () => {
       lenis.destroy();
-      cancelAnimationFrame(rafId);
+      cancelFrame(updateLenis);
     };
   }, []);
 

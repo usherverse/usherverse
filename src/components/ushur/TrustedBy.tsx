@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
 
 const BRANDS = [
@@ -64,9 +64,10 @@ function LogoTile({ b, i }: { b: (typeof BRANDS)[number]; i: number }) {
 export function TrustedBy() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const xSlow = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
-  const xFast = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const yFloat = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const xSlow = useTransform(smoothProgress, [0, 1], ["0%", "-12%"]);
+  const xFast = useTransform(smoothProgress, [0, 1], ["0%", "18%"]);
+  const yFloat = useTransform(smoothProgress, [0, 1], ["0%", "-8%"]);
 
   return (
     <section ref={ref} className="relative py-32 px-6 md:px-12 overflow-hidden bg-[var(--background)]">
