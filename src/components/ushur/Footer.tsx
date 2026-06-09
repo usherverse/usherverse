@@ -69,8 +69,8 @@ export function Footer() {
           transition={{ duration: 1.2, ease: [0.6, 0.05, 0.1, 1] }}
           className="py-12 select-none"
         >
-          <div className="font-display font-light text-[18vw] leading-[0.85] tracking-[-0.04em]">
-            Usherverse<span className="text-[var(--champagne)]">.</span>
+          <div className="font-display font-light text-[18vw] leading-[0.85] tracking-[-0.04em] relative inline-block">
+            Usherverse<span className="text-red-500">.</span><span className="font-display text-[3vw] align-super text-white/50 tracking-normal ml-1 select-none">©</span>
           </div>
         </motion.div>
 
