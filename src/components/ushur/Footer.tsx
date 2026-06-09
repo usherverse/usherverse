@@ -1,33 +1,12 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
 
 export function Footer() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = true;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { rootMargin: "300px 0px", threshold: 0 }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+  // Video commented out — re-enable by restoring the useRef/useEffect and <video> block below
   return (
     <footer className="relative text-[var(--foreground)] overflow-hidden bg-black">
 
-      {/* Background video */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background video — commented out to reduce page weight (2.3 MB) */}
+      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
           ref={videoRef}
           autoPlay
@@ -38,9 +17,8 @@ export function Footer() {
         >
           <source src="/footer-video-1080p.mp4" type="video/mp4" />
         </video>
-        {/* Dark gradient overlay so text stays readable */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/50" />
-      </div>
+      </div> */}
 
       <div className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-12 pt-24 pb-10">
         <div className="grid md:grid-cols-12 gap-12 pb-20 border-b border-[var(--foreground)]/15">

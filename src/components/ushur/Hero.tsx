@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const SLIDES = [
   { tag: "Website Development", num: "01" },
@@ -25,27 +25,9 @@ const TRANSITIONS = [
 export function Hero() {
   const [i, setI] = useState(0);
   const [t, setT] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = true;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { rootMargin: "200px 0px", threshold: 0 }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+  // Video commented out — re-enable by uncommenting the <video> block below
+  // and restoring: import { useRef } from "react" + the videoRef/observer useEffect
   useEffect(() => {
     const id = setInterval(() => {
       setI((p) => (p + 1) % SLIDES.length);
@@ -58,8 +40,8 @@ export function Hero() {
 
   return (
     <section id="top" className="relative isolate min-h-screen pt-32 pb-20 px-6 md:px-12 overflow-hidden">
-      {/* Background Video — infinite loop */}
-      <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
+      {/* Background Video — commented out to reduce page weight (8.2 MB) */}
+      {/* <div className="absolute inset-0 -z-20 overflow-hidden bg-[var(--background)]">
         <video
           ref={videoRef}
           src="/hero-video-1080p-loop2.mp4"
@@ -69,7 +51,7 @@ export function Hero() {
           playsInline
           className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-35 mix-blend-screen"
         />
-      </div>
+      </div> */}
 
       {/* slideshow backdrop */}
       <div className="absolute inset-0 -z-10">
