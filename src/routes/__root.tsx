@@ -142,8 +142,8 @@ function RootComponent() {
       touchMultiplier: 1.5,
     });
 
-    const updateLenis = (time: number) => {
-      lenis.raf(time);
+    const updateLenis = (frameData: { timestamp: number }) => {
+      lenis.raf(frameData.timestamp);
     };
 
     frame.update(updateLenis, true);
