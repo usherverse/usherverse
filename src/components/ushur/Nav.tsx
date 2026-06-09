@@ -102,7 +102,7 @@ export function Nav() {
             {/* Background Image with overlay for readability */}
             <div 
               className="absolute inset-0 -z-10 opacity-30 mix-blend-screen bg-cover bg-center"
-              style={{ backgroundImage: "url('/menu.jpg')" }}
+              style={{ backgroundImage: "url('/menu.webp')" }}
             />
             {/* Nav links */}
             <nav className="flex flex-col gap-0 flex-1">

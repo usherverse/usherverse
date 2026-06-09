@@ -8,7 +8,7 @@ export function Contact() {
       <div className="absolute -top-[100svh] bottom-0 left-0 right-0 z-0">
         <div 
           className="sticky top-0 w-full h-[100svh] bg-cover bg-center will-change-transform"
-          style={{ backgroundImage: "url('/6.jpg')" }}
+          style={{ backgroundImage: "url('/6.webp')" }}
         />
       </div>
       <div className="max-w-[1600px] mx-auto relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 shadow-2xl rounded-3xl p-8 md:p-16 transform-gpu">
