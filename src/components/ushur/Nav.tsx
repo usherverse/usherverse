@@ -28,6 +28,18 @@ export function Nav() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    setTimeout(() => {
+      window.history.pushState(null, '', href);
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 150); // wait for menu to start closing and overflow to reset
+  };
+
   return (
     <>
       <motion.header
@@ -47,7 +59,7 @@ export function Nav() {
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.25em]">
             {LINKS.map((l, i) => (
-              <a key={l.href} href={l.href} className="relative group">
+              <a key={l.href} href={l.href} onClick={(e) => handleNavClick(e, l.href)} className="relative group">
                 <span className="text-[var(--muted-foreground)] group-hover:text-[var(--foreground)] transition-colors">
                   <span className="text-[var(--champagne)] mr-2">0{i + 1}</span>{l.label}
                 </span>
@@ -57,6 +69,7 @@ export function Nav() {
 
           <a
             href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="hidden md:inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] border-b border-[var(--foreground)] pb-1 hover:text-[var(--champagne)] hover:border-[var(--champagne)] transition-colors"
           >
             Start a project →
@@ -110,7 +123,7 @@ export function Nav() {
                 <motion.a
                   key={l.href}
                   href={l.href}
-                  onClick={closeMenu}
+                  onClick={(e) => handleNavClick(e, l.href)}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 + i * 0.07, ease: [0.6, 0.05, 0.1, 1] }}
@@ -130,7 +143,7 @@ export function Nav() {
             {/* CTA at bottom */}
             <motion.a
               href="#contact"
-              onClick={closeMenu}
+              onClick={(e) => handleNavClick(e, '#contact')}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.5 }}
