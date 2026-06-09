@@ -12,15 +12,15 @@ export function Intro({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     //  0 ms  → spread  (initial state, letters fanned out)
     //  600ms → converge (fly in faster)
-    // 4300ms → scatter  (shorter hold — title is legible, then out)
-    // 5100ms → exit     (fade overlay)
-    // 5700ms → done     (hand off to Hero)
+    // 3800ms → scatter  (shorter hold — title is legible, then out)
+    // 4600ms → exit     (fade overlay)
+    // 5200ms → done     (hand off to Hero)
     const t1 = setTimeout(() => setPhase("converge"), 600);
-    const t2 = setTimeout(() => setPhase("scatter"),  4300);
-    const t3 = setTimeout(() => setPhase("exit"),     5100);
+    const t2 = setTimeout(() => setPhase("scatter"),  3800);
+    const t3 = setTimeout(() => setPhase("exit"),     4600);
     const t4 = setTimeout(() => {
       onDone();
-    }, 5700);
+    }, 5200);
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [onDone]);
@@ -108,7 +108,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 5.1, ease: "linear" }}
+            transition={{ duration: 4.6, ease: "linear" }}
             className="absolute bottom-0 left-0 h-px w-full bg-[var(--champagne)] origin-left"
             style={{ willChange: "transform" }}
           />
