@@ -88,7 +88,7 @@ export function Contact() {
                   <textarea
                     name="desc"
                     rows={5}
-                    placeholder="Tell me what you're trying to build, fix, or remove."
+                    placeholder="Tell us what you're trying to build, fix, or remove."
                     className="w-full bg-transparent outline-none font-display text-xl placeholder:text-white/40 resize-none text-white"
                   />
                 </div>

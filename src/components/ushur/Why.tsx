@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const C = [
   { n: "I", t: "Design Thinking", d: "Editorial sensibility, ruthless restraint, and interfaces that feel composed — not assembled." },
   { n: "II", t: "Technical Expertise", d: "Typed, observable, scalable systems engineered for the long haul, not the demo." },
-  { n: "III", t: "Automation Mindset", d: "If a human is doing it twice, a machine should be doing it. The hours saved are the brief." },
+  { n: "III", t: "Automation Mindset", d: "If it's done twice, we automate it. The hours saved become the brief." },
 ];
 
 export function Why() {
@@ -19,12 +19,12 @@ export function Why() {
         <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/60 mb-16">
           <span className="text-[var(--champagne)]">08</span>
           <span className="w-12 h-px bg-white/30" />
-          <span className="text-white drop-shadow-md">Why Work With Me</span>
+          <span className="text-white drop-shadow-md">Why Work With Us</span>
         </div>
 
         <h2 className="font-display font-light text-[8vw] md:text-[5.5vw] leading-[0.95] tracking-[-0.02em] mb-20 max-w-5xl text-white drop-shadow-lg">
           Three disciplines.<br />
-          <em className="text-[var(--champagne)] drop-shadow-none">One operator.</em>
+          <em className="text-[var(--champagne)] drop-shadow-none">One team.</em>
         </h2>
 
         <div className="grid md:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md">

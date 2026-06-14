@@ -78,7 +78,7 @@ export function Footer() {
           <div>© 2026 Usherverse — All rights reserved</div>
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[var(--champagne)] animate-pulse" />
-            Available for new engagements
+            Open to new engagements
           </div>
           <div>&#169; Made in the Usherverse</div>
         </div>

@@ -85,7 +85,7 @@ export function Hero() {
         </div>
 
         <h1 className="font-display font-light text-[10vw] md:text-[7vw] leading-[0.95] tracking-[-0.03em] text-balance max-w-[1400px] text-white">
-          I build websites,<br />
+          We build websites,<br />
           <span className="italic">systems</span> &amp; automations<br />
           <span className="text-white/70">that eliminate </span>
           <span className="italic text-[var(--champagne)]">repetitive work.</span>

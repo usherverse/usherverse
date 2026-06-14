@@ -65,7 +65,7 @@ export function Services() {
             and automates.
           </h2>
           <p className="md:col-span-4 md:pt-6 text-white/70 leading-relaxed drop-shadow-md">
-            Six disciplines. One operator. Every engagement combines strategy, design,
+            Six disciplines. One team. Every engagement combines strategy, design,
             development and automation into a single, accountable practice.
           </p>
         </div>
@@ -78,7 +78,7 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: (i % 3) * 0.1 }}
-              className="bg-black/30 p-10 group relative overflow-hidden cursor-pointer min-h-[420px] flex flex-col hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500"
+              className="bg-black/30 p-10 group relative overflow-hidden cursor-pointer min-h-[420px] flex flex-col hover:bg-white hover:text-black transition-colors duration-500"
             >
               <div className="flex items-start justify-between mb-12">
                 <span className="text-xs tracking-[0.3em] text-[var(--champagne)]">{s.num}</span>
@@ -87,10 +87,10 @@ export function Services() {
               <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4 group-hover:translate-x-2 transition-transform duration-500 drop-shadow-md">
                 {s.title}
               </h3>
-              <p className="text-white/70 group-hover:text-[var(--bone)]/80 mb-8 leading-relaxed transition-colors duration-500">{s.desc}</p>
-              <ul className="mt-auto space-y-2 text-xs uppercase tracking-[0.2em] text-white/80 group-hover:text-[var(--bone)] transition-colors duration-500">
+              <p className="text-white/70 group-hover:text-black/70 mb-8 leading-relaxed transition-colors duration-500">{s.desc}</p>
+              <ul className="mt-auto space-y-2 text-xs uppercase tracking-[0.2em] text-white/80 group-hover:text-black/80 transition-colors duration-500">
                 {s.items.map((it) => (
-                  <li key={it} className="flex items-center gap-3 border-t border-white/10 group-hover:border-[var(--bone)]/20 pt-2 transition-colors duration-500">
+                  <li key={it} className="flex items-center gap-3 border-t border-white/10 group-hover:border-black/20 pt-2 transition-colors duration-500">
                     <span className="text-[var(--champagne)]">—</span>{it}
                   </li>
                 ))}
@@ -103,7 +103,7 @@ export function Services() {
                   backgroundPosition: `${(i % 3) * 50}% ${Math.floor(i / 3) * 100}%` 
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
             </motion.article>
           ))}
         </div>

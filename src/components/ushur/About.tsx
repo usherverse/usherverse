@@ -60,19 +60,19 @@ export function About() {
               transition={{ duration: 1, ease: [0.6, 0.05, 0.1, 1] }}
               className="font-display font-light text-[7vw] md:text-[5vw] leading-[0.95] tracking-[-0.02em] text-balance text-white drop-shadow-lg"
             >
-              I build <em className="text-[var(--champagne)] drop-shadow-none">technology</em> that works for people —
+              We build <em className="text-[var(--champagne)] drop-shadow-none">technology</em> that works for people —
               <span className="text-white/70"> systems that quietly do the heavy lifting.</span>
             </motion.h2>
           </div>
 
           <div className="md:col-span-5 md:pt-6 space-y-8 text-white/80 leading-relaxed">
             <p className="text-base">
-              Usherverse is a one-person studio practicing at the intersection of design,
-              engineering, and operations. The mandate is simple: take what's manual,
+              Usherverse is a studio practicing at the intersection of design,
+              engineering, and operations. Our mandate is simple: take what's manual,
               fragmented, and slow, and rebuild it as something quiet, fast, and inevitable.
             </p>
             <p>
-              Years of shipping production interfaces, internal tools, and bespoke automations
+              We've shipped production interfaces, internal tools, and bespoke automations
               for founders, agencies, and operators across industries — always with a bias
               toward clarity, performance, and the kind of polish that earns trust.
             </p>
