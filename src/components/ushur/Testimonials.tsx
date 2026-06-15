@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 const T = [
   { q: "Usherverse rebuilt our entire operations stack in eight weeks. We've reclaimed roughly twenty hours a week, every week.", a: "Naledi K.", r: "COO, Logistics Group" },
-  { q: "Equal parts designer, engineer and operator. The system he shipped is the calmest software we own.", a: "Marcus D.", r: "Founder, FinTech Studio" },
-  { q: "He looked at a workflow we'd lived with for years and quietly removed it. The result is honestly elegant.", a: "Imani R.", r: "Director, Health Practice" },
+  { q: "Equal parts designers, engineers, and operators. The system they shipped is the calmest software we own.", a: "Marcus D.", r: "Founder, FinTech Studio" },
+  { q: "They looked at a workflow we'd lived with for years and quietly removed it. The result is honestly elegant.", a: "Imani R.", r: "Director, Health Practice" },
   { q: "The brand site looks like it belongs in a magazine. The CMS behind it is even better than the front.", a: "Jules P.", r: "Creative Director" },
 ];
 

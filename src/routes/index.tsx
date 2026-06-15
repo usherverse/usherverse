@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Usherverse — Websites, Systems & Automations" },
-      { name: "description", content: "Usherverse is a one-person studio designing websites, building systems, and automating the work that slows businesses down. Big Little World." },
+      { name: "description", content: "Usherverse is a team of professionals designing websites, building systems, and automating the work that slows businesses down. Big Little World." },
       { property: "og:title", content: "Usherverse — Big Little World" },
       { property: "og:description", content: "Editorial websites, bespoke business systems, and intelligent automations. Built with restraint, shipped with care." },
       { property: "og:type", content: "website" },
