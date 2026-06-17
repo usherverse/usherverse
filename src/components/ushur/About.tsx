@@ -102,7 +102,7 @@ export function About() {
               transition={{ duration: 0.8, delay: i * 0.08 }}
               className="bg-black/30 p-8 group hover:bg-[var(--ink)] hover:text-[var(--bone)] transition-colors duration-500 flex flex-col justify-center text-white"
             >
-              <div className={`font-display font-light tracking-tight drop-shadow-md break-words ${s.isText ? 'text-lg md:text-3xl' : 'text-4xl md:text-5xl'}`}>
+              <div className={`font-display font-light tracking-tight drop-shadow-md whitespace-nowrap ${s.isText ? 'text-lg md:text-3xl' : 'text-4xl md:text-5xl'}`}>
                 {s.isText ? s.text : <Count to={s.value as number} suffix={s.suffix as string} />}
               </div>
               <div className="mt-4 text-[10px] uppercase tracking-[0.25em] text-white/60 group-hover:text-[var(--bone)]/60">
