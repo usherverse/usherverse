@@ -30,16 +30,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Large binary files
-ffmpeg/
-ffmpeg.zip
-ushurverse-digital-universe-main/ffmpeg/
-ushurverse-digital-universe-main/ffmpeg.zip
-
-# Environment files
-.env
-.env.example
-.env.local
-.env.development
-.env.production

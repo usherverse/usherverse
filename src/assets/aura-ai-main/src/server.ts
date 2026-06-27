@@ -37,20 +37,9 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-import { chatHandler } from "./api/chat";
-import { generateSpecHandler } from "./api/generate-spec";
-
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
-      const url = new URL(request.url);
-      if (request.method === "POST" && url.pathname === "/api/chat") {
-        return await chatHandler(request);
-      }
-      if (request.method === "POST" && url.pathname === "/api/generate-spec") {
-        return await generateSpecHandler(request);
-      }
-
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

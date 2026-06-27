@@ -39,7 +39,6 @@ function Index() {
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}
       <div className="relative bg-[var(--background)] text-[var(--foreground)]">
         <Nav />
-        {/* Hero is always rendered — it's above the fold */}
         <Hero />
 
         {/* Every section below the fold is lazy — only mounts when near viewport */}

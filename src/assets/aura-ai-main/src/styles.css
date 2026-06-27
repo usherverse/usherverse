@@ -4,7 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 /*
  * Design system definition.
  *
@@ -20,8 +19,6 @@
  */
 
 @theme inline {
-  --font-display: "Fraunces", "Times New Roman", serif;
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -69,54 +66,31 @@
   --color-aurora-pink: var(--aurora-pink);
   --color-aurora-indigo: var(--aurora-indigo);
   --color-aurora-teal: var(--aurora-teal);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.25rem;
-  /* Ushurverse — luxury editorial monochrome with warm bone + champagne accent */
-  --background: oklch(0.14 0.005 80);            /* deep dark gray/ink */
-  --foreground: oklch(0.92 0.006 80);           /* bright bone */
-  --card: oklch(0.16 0.007 80);
-  --card-foreground: oklch(0.92 0.006 80);
-  --popover: oklch(0.14 0.005 80);
-  --popover-foreground: oklch(0.92 0.006 80);
-  --primary: oklch(0.92 0.006 80);              /* bright bone */
-  --primary-foreground: oklch(0.14 0.005 80);
-  --secondary: oklch(0.20 0.008 80);
-  --secondary-foreground: oklch(0.92 0.006 80);
-  --muted: oklch(0.20 0.008 80);
-  --muted-foreground: oklch(0.65 0.01 80);
-  --accent: oklch(0.55 0.26 22);                 /* vivid bright crimson */
-  --accent-foreground: oklch(0.14 0.005 80);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.25 0.008 80);
-  --input: oklch(0.25 0.008 80);
-  --ring: oklch(0.55 0.26 22);                   /* vivid bright crimson */
-  --ink: oklch(0.92 0.006 80);                  /* INVERTED: ink is now bright bone */
-  --bone: oklch(0.14 0.005 80);                 /* INVERTED: bone is now dark ink */
-  --charcoal: oklch(0.85 0.006 80);
-  --champagne: oklch(0.55 0.26 22);              /* vivid bright crimson */
-  --grain: oklch(0.4 0.005 80);
-  --gradient-editorial: linear-gradient(180deg, oklch(0.14 0.005 80) 0%, oklch(0.20 0.008 80) 100%);
-  --gradient-ink: linear-gradient(135deg, oklch(0.92 0.006 80) 0%, oklch(0.85 0.006 80) 100%);
-  --shadow-soft: 0 30px 80px -30px oklch(0.14 0.005 80 / 0.25);
-  --shadow-lift: 0 60px 120px -40px oklch(0.14 0.005 80 / 0.35);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-
-  /* Aura Additions */
+  --radius: 1.5rem;
+  --background: oklch(0.06 0.01 270);
+  --foreground: oklch(0.97 0.01 270);
+  --card: oklch(0.10 0.02 270 / 60%);
+  --card-foreground: oklch(0.97 0.01 270);
+  --popover: oklch(0.10 0.02 270 / 90%);
+  --popover-foreground: oklch(0.97 0.01 270);
+  --primary: oklch(0.72 0.18 265);
+  --primary-foreground: oklch(0.10 0.02 270);
+  --secondary: oklch(0.18 0.03 270 / 60%);
+  --secondary-foreground: oklch(0.97 0.01 270);
+  --muted: oklch(0.16 0.02 270 / 50%);
+  --muted-foreground: oklch(0.70 0.03 270);
+  --accent: oklch(0.20 0.05 290 / 60%);
+  --accent-foreground: oklch(0.97 0.01 270);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.97 0.01 270);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.72 0.18 265 / 60%);
   --aurora-red: oklch(0.65 0.24 25);
   --aurora-blue: oklch(0.70 0.20 250);
   --aurora-cyan: oklch(0.82 0.15 200);
@@ -124,11 +98,24 @@
   --aurora-pink: oklch(0.75 0.20 350);
   --aurora-indigo: oklch(0.55 0.22 275);
   --aurora-teal: oklch(0.78 0.15 180);
+  --chart-1: var(--aurora-blue);
+  --chart-2: var(--aurora-cyan);
+  --chart-3: var(--aurora-purple);
+  --chart-4: var(--aurora-pink);
+  --chart-5: var(--aurora-teal);
+  --sidebar: oklch(0.08 0.02 270);
+  --sidebar-foreground: oklch(0.97 0.01 270);
+  --sidebar-primary: var(--aurora-indigo);
+  --sidebar-primary-foreground: oklch(0.97 0.01 270);
+  --sidebar-accent: oklch(0.18 0.03 270);
+  --sidebar-accent-foreground: oklch(0.97 0.01 270);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.72 0.18 265);
 }
 
 .dark {
-  --background: oklch(0.10 0.005 80);
-  --foreground: oklch(0.97 0.005 80);
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
@@ -171,59 +158,11 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  h1, h2, h3, h4, h5 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-  }
-
-  ::selection {
-    background: var(--ink);
-    color: var(--bone);
-  }
-
-  html {
-    scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 }
 
 @layer utilities {
-  .font-display { font-family: var(--font-display); }
-  .font-sans { font-family: var(--font-sans); }
-  .text-balance { text-wrap: balance; }
-  .grain::after {
-    content: "";
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    opacity: 0.08;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-  }
-  .marquee {
-    animation: marquee 40s linear infinite;
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes pulse-gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .animate-pulse-gradient {
-    background-size: 200% 200%;
-    animation: pulse-gradient 4s ease infinite;
-  }
-  .animate-pulse-gradient-fast {
-    background-size: 200% 200%;
-    animation: pulse-gradient 1.5s ease infinite;
-  }
-
-  /* Aura Utilities */
   .glass {
     background: color-mix(in oklab, white 4%, transparent);
     backdrop-filter: blur(28px) saturate(160%);

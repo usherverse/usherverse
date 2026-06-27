@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 
 const LINKS = [
   { label: "Home", href: "#top" },
@@ -7,6 +8,10 @@ const LINKS = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "Contact", href: "#contact" },
+];
+
+const ROUTE_LINKS = [
+  { label: "AI Consultant", href: "/ai-consultant" },
 ];
 
 export function Nav() {
@@ -64,6 +69,13 @@ export function Nav() {
                   <span className="text-[var(--champagne)] mr-2">0{i + 1}</span>{l.label}
                 </span>
               </a>
+            ))}
+            {ROUTE_LINKS.map((l) => (
+              <Link key={l.href} to={l.href} className="relative group">
+                <span className="text-[var(--champagne)] transition-colors">
+                  ✦ {l.label}
+                </span>
+              </Link>
             ))}
           </nav>
 
@@ -137,6 +149,27 @@ export function Nav() {
                   </div>
                   <span className="text-[var(--muted-foreground)] group-hover:translate-x-1 group-hover:text-[var(--champagne)] transition-all duration-300">→</span>
                 </motion.a>
+              ))}
+              {ROUTE_LINKS.map((l, i) => (
+                <motion.div key={l.href}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 + (LINKS.length + i) * 0.07, ease: [0.6, 0.05, 0.1, 1] }}
+                >
+                  <Link
+                    to={l.href}
+                    onClick={closeMenu}
+                    className="group flex items-center justify-between border-b border-[var(--border)] py-6"
+                  >
+                    <div className="flex items-center gap-5">
+                      <span className="text-[var(--champagne)] text-xs tracking-[0.3em] uppercase">✦</span>
+                      <span className="font-display text-4xl font-light tracking-tight text-[var(--champagne)] group-hover:opacity-80 transition-colors duration-300">
+                        {l.label}
+                      </span>
+                    </div>
+                    <span className="text-[var(--champagne)] group-hover:translate-x-1 transition-all duration-300">→</span>
+                  </Link>
+                </motion.div>
               ))}
             </nav>
 
