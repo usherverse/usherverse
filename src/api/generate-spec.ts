@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { groq } from "@ai-sdk/groq";
+import { createGroq } from "@ai-sdk/groq";
 import { z } from "zod";
 
 const specSchema = z.object({
@@ -17,16 +17,26 @@ const specSchema = z.object({
   detailedPrompt: z.string(),
 });
 
-export async function generateSpecHandler(request: Request) {
+export async function generateSpecHandler(request: Request, env?: any) {
   try {
     const { messages } = await request.json();
+
+    const envObj = env || (typeof process !== "undefined" ? process.env : {});
+    const rawKeys = (envObj.GROQ_API_KEYS || envObj.GROQ_API_KEY || "") as string;
+    const apiKeys = rawKeys.split(",").map((k) => k.trim()).filter(Boolean);
+
+    if (apiKeys.length === 0) {
+      throw new Error("No API keys configured");
+    }
+
+    const groqProvider = createGroq({ apiKey: apiKeys[0] });
 
     const conversationText = messages
       .map((m: { role: string; content: string }) => `${m.role.toUpperCase()}: ${m.content}`)
       .join("\n\n");
 
     const { object } = await generateObject({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groqProvider("llama-3.3-70b-versatile"),
       schema: specSchema,
       prompt: `Based on the following website consultation conversation, generate a detailed website specification.
 

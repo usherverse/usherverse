@@ -45,10 +45,10 @@ export default {
     try {
       const url = new URL(request.url);
       if (request.method === "POST" && url.pathname === "/api/chat") {
-        return await chatHandler(request);
+        return await chatHandler(request, env);
       }
       if (request.method === "POST" && url.pathname === "/api/generate-spec") {
-        return await generateSpecHandler(request);
+        return await generateSpecHandler(request, env);
       }
 
       const handler = await getServerEntry();

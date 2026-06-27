@@ -1,11 +1,6 @@
 import { generateText } from "ai";
 import { createGroq } from "@ai-sdk/groq";
 
-// You can provide multiple keys separated by commas in your .env file
-// Example: GROQ_API_KEYS="gsk_123,gsk_456,gsk_789"
-const rawKeys = process.env.GROQ_API_KEYS || process.env.GROQ_API_KEY || "";
-const apiKeys = rawKeys.split(",").map((k) => k.trim()).filter(Boolean);
-
 let currentKeyIndex = 0;
 
 const GENERAL_SYSTEM_PROMPT = `You are "Jenny", a highly intelligent, capable, and friendly AI assistant. 
@@ -89,7 +84,7 @@ Q17. Is there anything else you'd like the website to do that we haven't discuss
 When the user has answered question 17, conclude with EXACTLY: "[CONSULTATION_COMPLETE]".
 Do not use this phrase until all 17 questions are answered.`;
 
-export async function chatHandler(request: Request) {
+export async function chatHandler(request: Request, env?: any) {
   try {
     const { messages, mode = "general" } = await request.json();
 
@@ -100,10 +95,18 @@ export async function chatHandler(request: Request) {
 
     const systemPrompt = mode === "questionnaire" ? QUESTIONNAIRE_SYSTEM_PROMPT : GENERAL_SYSTEM_PROMPT;
 
+    // Dynamically get keys from the passed env object (Cloudflare) or process.env (Node)
+    const envObj = env || (typeof process !== "undefined" ? process.env : {});
+    const rawKeys = (envObj.GROQ_API_KEYS || envObj.GROQ_API_KEY || "") as string;
+    const apiKeys = rawKeys.split(",").map((k) => k.trim()).filter(Boolean);
+
     // Use the current API key
     if (apiKeys.length === 0) {
       throw new Error("No API keys configured");
     }
+
+    // Reset index if we deleted keys
+    if (currentKeyIndex >= apiKeys.length) currentKeyIndex = 0;
 
     const groqProvider = createGroq({ apiKey: apiKeys[currentKeyIndex] });
 
