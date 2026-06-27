@@ -78,12 +78,21 @@ export const speakFriday = (text: string, onEnd?: () => void) => {
     const voices = window.speechSynthesis.getVoices();
 
     const preferredVoice =
+      // Best Windows/Edge Network Voices
       voices.find((v) => v.name.includes("Natural") && (v.name.includes("Female") || v.name.includes("Aria") || v.name.includes("Jenny") || v.name.includes("Sonia"))) ||
       voices.find((v) => v.name.includes("Online") && v.name.includes("Female")) ||
+      // High-Quality Network Voices (Chrome Android)
+      voices.find((v) => v.name.includes("Google") && v.name.includes("Female") && v.localService === false) ||
+      voices.find((v) => !v.localService && v.lang.startsWith("en") && v.name.includes("Female")) ||
+      // Standard Google Female Voices
       voices.find((v) => v.name.includes("Google UK English Female") || v.name.includes("Google US English Female")) ||
-      voices.find((v) => v.name.includes("Samantha")) || // macOS best default
-      voices.find((v) => v.name.includes("Zira")) ||     // Windows fallback
+      // Apple/macOS
+      voices.find((v) => v.name.includes("Samantha")) || 
+      // Windows Offline Fallback
+      voices.find((v) => v.name.includes("Zira")) ||     
+      // Generic Fallbacks
       voices.find((v) => v.name.includes("Female") && v.lang.startsWith("en")) ||
+      voices.find((v) => v.lang.startsWith("en") && !v.localService) ||
       voices.find((v) => v.lang.startsWith("en"));
 
     if (preferredVoice) {
