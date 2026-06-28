@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, User, FileText, CheckCircle2, Copy, Download, Calendar, Check, Paperclip, ArrowUp, Mic, Square, Settings, X } from "lucide-react";
+import { Send, Sparkles, User, FileText, CheckCircle2, Copy, Download, Calendar, Check, Paperclip, ArrowUp, Mic, Square, Settings, X, Hexagon, MessageCircle } from "lucide-react";
 import { speakFriday as speakJenny, stopFriday as stopJenny, pauseJenny, resumeJenny, isJennySpeaking } from "../../utils/speech";
 import { VoiceRecognition } from "../../utils/speechRecognition";
 import { AmbientBackground } from "./aura/AmbientBackground";
