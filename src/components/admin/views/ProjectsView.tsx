@@ -336,6 +336,7 @@ export function ProjectsView({ password }: Props) {
             onClose={() => { setFormOpen(false); setEditingProject(null); }}
             onSave={handleSave}
             initialData={editingProject || undefined}
+            password={password}
           />
         )}
       </AnimatePresence>

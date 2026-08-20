@@ -1,10 +1,69 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { X, ArrowUp, Mic, Paperclip } from "lucide-react";
 import { VoiceRecognition } from "../../utils/speechRecognition";
 import { speakFriday as speakJenny, stopFriday as stopJenny, pauseJenny, resumeJenny, isJennySpeaking } from "../../utils/speech";
 import { AnimatePresence, motion } from "framer-motion";
 import { VoiceMode } from "./aura/VoiceMode";
 import { OrbMark } from "./aura/LiquidOrb";
+
+// ─── Draggable logic ────────────────────────────────────────────────────────
+
+const JENNY_POS_KEY = "jenny_chat_position";
+const BTN = 64; // button size px
+const MARGIN = 24;
+
+function getDefaultPos() {
+  if (typeof window === "undefined") return { x: 0, y: 0 };
+  return { x: window.innerWidth - BTN - MARGIN, y: window.innerHeight - BTN - MARGIN };
+}
+
+function clampPos(x: number, y: number) {
+  const maxX = window.innerWidth - BTN - 4;
+  const maxY = window.innerHeight - BTN - 4;
+  return { x: Math.max(4, Math.min(x, maxX)), y: Math.max(4, Math.min(y, maxY)) };
+}
+
+function loadSavedPos() {
+  try {
+    const raw = localStorage.getItem(JENNY_POS_KEY);
+    if (raw) return clampPos(...(Object.values(JSON.parse(raw)) as [number, number]));
+  } catch {}
+  return getDefaultPos();
+}
+
+function useDraggable() {
+  const [pos, setPos] = useState<{ x: number; y: number }>(loadSavedPos);
+  const [dragging, setDragging] = useState(false);
+  const info = useRef({ startX: 0, startY: 0, origX: 0, origY: 0, moved: false });
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    info.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y, moved: false };
+    setDragging(true);
+  }, [pos]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging) return;
+    const dx = e.clientX - info.current.startX;
+    const dy = e.clientY - info.current.startY;
+    if (!info.current.moved && Math.hypot(dx, dy) < 5) return;
+    info.current.moved = true;
+    setPos(clampPos(info.current.origX + dx, info.current.origY + dy));
+  }, [dragging]);
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    setDragging(false);
+  }, []);
+
+  const wasDrag = () => info.current.moved;
+
+  // Persist position
+  useEffect(() => {
+    try { localStorage.setItem(JENNY_POS_KEY, JSON.stringify(pos)); } catch {}
+  }, [pos]);
+
+  return { pos, dragging, onPointerDown, onPointerMove, onPointerUp, wasDrag };
+}
 
 function TypewriterText({ text, animate, onUpdate }: { text: string, animate: boolean, onUpdate?: () => void }) {
   const [displayedText, setDisplayedText] = useState(animate ? "" : text);
@@ -48,6 +107,22 @@ export function FloatingChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const voiceRef = useRef<VoiceRecognition | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // ─── Drag ────────────────────────────────────────────────────────────────
+  const { pos, dragging, onPointerDown, onPointerMove, onPointerUp, wasDrag } = useDraggable();
+
+  const getPanelStyle = (): React.CSSProperties => {
+    const PANEL_W = Math.min(420, window.innerWidth - 16);
+    const PANEL_H = Math.min(600, window.innerHeight * 0.8);
+    const mg = 8;
+    let left = pos.x - PANEL_W + BTN;
+    let top  = pos.y - PANEL_H + BTN;
+    if (left < mg) left = mg;
+    if (left + PANEL_W > window.innerWidth - mg) left = window.innerWidth - PANEL_W - mg;
+    if (top  < mg) top  = mg;
+    if (top + PANEL_H > window.innerHeight - mg) top = pos.y - PANEL_H - mg;
+    return { left, top, width: PANEL_W, height: PANEL_H };
+  };
 
   useEffect(() => {
     if (!isLoading && isOpen && !voiceMode && inputRef.current) {
@@ -227,22 +302,54 @@ export function FloatingChat() {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 ${
-          isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
-        }`}
-        aria-label="Open chat"
-      >
-        <OrbMark />
-      </button>
-
+      {/* ── Draggable toggle button ────────────────────────────────────────── */}
       <div
-        className={`fixed bottom-6 right-6 z-50 flex h-[600px] max-h-[80vh] w-[420px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-3xl bg-background shadow-2xl transition-all duration-300 ease-in-out ${
+        style={{
+          position: "fixed",
+          left: pos.x,
+          top: pos.y,
+          width: BTN,
+          height: BTN,
+          zIndex: 50,
+          cursor: dragging ? "grabbing" : "grab",
+          touchAction: "none",
+          userSelect: "none",
+        }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={(e) => {
+          onPointerUp(e);
+          if (!wasDrag()) setIsOpen((o) => !o);
+        }}
+        title="Drag to reposition · Click to open"
+      >
+        <div
+          className={`w-full h-full flex items-center justify-center rounded-full shadow-2xl transition-all duration-200 ${
+            isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
+          } ${!dragging ? "hover:scale-105" : ""}`}
+        >
+          <OrbMark />
+        </div>
+        {/* Drag-handle dots hint */}
+        {!isOpen && (
+          <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white/20 backdrop-blur flex items-center justify-center pointer-events-none">
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="currentColor" className="text-white/70">
+              <circle cx="3" cy="3" r="1.2" /><circle cx="7" cy="3" r="1.2" />
+              <circle cx="3" cy="7" r="1.2" /><circle cx="7" cy="7" r="1.2" />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {/* ── Chat panel — pinned near button ───────────────────────────────── */}
+      <div
+        className={`fixed z-50 flex flex-col overflow-hidden rounded-3xl bg-background shadow-2xl transition-all duration-300 ease-in-out ${
           isOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "translate-y-8 opacity-0 pointer-events-none"
         }`}
+        style={isOpen ? { ...getPanelStyle(), maxHeight: "80vh" } : { left: pos.x, top: pos.y, width: 0, height: 0 }}
+
       >
         <div className="flex items-center justify-between border-b border-white/5 bg-black/20 px-5 py-4 shrink-0">
           <div className="flex items-center gap-3">

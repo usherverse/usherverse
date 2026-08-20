@@ -23,6 +23,7 @@ export interface Consultation {
   ux_recommendations: string[];
   detailed_prompt: string;
   chat_history: { role: string; content: string }[];
+  phone?: string;
   notes?: string;
 }
 

@@ -1,9 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, ChevronRight, ChevronLeft, Plus, Trash2, ArrowUpRight,
-  Star, Globe, Github, Tag, Loader2, Check
+  Star, Globe, Github, Tag, Loader2, Check, Upload, ImageIcon
 } from "lucide-react";
+
+// ------- Types -------
+
+export interface KeyFeature {
+  title: string;
+  points: string;  // newline-separated bullet points
+}
 
 export interface ProjectFormData {
   title: string;
@@ -17,8 +24,7 @@ export interface ProjectFormData {
   problem: string;
   solution: string;
   results: string;
-  key_features: string[];
-  metrics: { value: string; label: string }[];
+  key_features: KeyFeature[];
   technologies: string[];
   featured_image: string;
   gallery: { url: string; caption: string }[];
@@ -43,7 +49,6 @@ const EMPTY_FORM: ProjectFormData = {
   solution: "",
   results: "",
   key_features: [],
-  metrics: [],
   technologies: [],
   featured_image: "",
   gallery: [],
@@ -72,7 +77,10 @@ interface Props {
   onClose: () => void;
   onSave: (data: ProjectFormData) => Promise<void>;
   initialData?: Partial<ProjectFormData> & { id?: string };
+  password: string;
 }
+
+// ------- UI Helpers -------
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return <label className="block text-xs text-white/40 uppercase tracking-widest mb-2">{children}</label>;
@@ -172,21 +180,145 @@ function TagInput({ id, values, onChange, placeholder }: {
   );
 }
 
-export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
+// Gallery row sub-component — needed so useRef isn't called inside a .map() callback
+function GalleryRow({ img, index, onUpload, onCaptionChange, onRemove, onClearUrl }: {
+  img: { url: string; caption: string };
+  index: number;
+  onUpload: (i: number, file: File) => void;
+  onCaptionChange: (i: number, v: string) => void;
+  onRemove: (i: number) => void;
+  onClearUrl: (i: number) => void;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  return (
+    <div className="flex gap-2 items-start bg-white/5 p-3 rounded-xl border border-white/10">
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) onUpload(index, f); }}
+      />
+      <div className="flex-1 space-y-2">
+        {img.url ? (
+          <div className="relative">
+            <div className="w-full h-28 rounded-lg overflow-hidden bg-black/50 border border-white/10">
+              <img src={img.url} alt="" className="w-full h-full object-cover" />
+            </div>
+            <button
+              type="button"
+              onClick={() => onClearUrl(index)}
+              className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/70 text-white/50 hover:text-white transition-colors"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className="w-full h-20 rounded-lg border border-dashed border-white/15 flex items-center justify-center gap-2 text-white/30 text-xs hover:border-white/30 hover:text-white/50 transition-colors"
+          >
+            <Upload className="w-4 h-4" /> Click to upload
+          </button>
+        )}
+        <input
+          type="text"
+          value={img.caption}
+          onChange={(e) => onCaptionChange(index, e.target.value)}
+          placeholder="Caption (optional)"
+          className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
+        />
+      </div>
+      <button type="button" onClick={() => onRemove(index)} className="p-2 text-white/20 hover:text-red-400 transition-colors shrink-0">
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+// ------- ImageUploader -------
+
+function ImageUploader({ onUploaded, password }: { onUploaded: (url: string) => void; password: string }) {
+  const [uploading, setUploading] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${password}` },
+        body,
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json();
+      onUploaded(url);
+    } catch (e) {
+      alert("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        ref={ref}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+      />
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        disabled={uploading}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/20 transition-all disabled:opacity-50"
+        style={{ background: "rgba(255,255,255,0.04)" }}
+      >
+        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+        {uploading ? "Uploading…" : "Upload Screenshot"}
+      </button>
+    </div>
+  );
+}
+
+// ------- Main Form Component -------
+
+export function ProjectForm({ open, onClose, onSave, initialData, password }: Props) {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<ProjectFormData>({ ...EMPTY_FORM, ...initialData });
   const [saving, setSaving] = useState(false);
   const [isDraftLoaded, setIsDraftLoaded] = useState(false);
+  const [featuredUploading, setFeaturedUploading] = useState(false);
+  const featuredRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open) {
       if (initialData?.id) {
-        setForm({ ...EMPTY_FORM, ...initialData });
+        // Normalize key_features from old format (string[]) or new format (KeyFeature[])
+        const raw: any = initialData.key_features ?? [];
+        const normalized: KeyFeature[] = raw.map((item: any) =>
+          typeof item === "string"
+            ? { title: item, points: "" }
+            : item
+        );
+        setForm({ ...EMPTY_FORM, ...initialData, key_features: normalized });
       } else {
         const draft = localStorage.getItem("usherverse_project_draft");
         if (draft) {
           try {
-            setForm({ ...EMPTY_FORM, ...JSON.parse(draft) });
+            const parsed = JSON.parse(draft);
+            const raw: any = parsed.key_features ?? [];
+            const normalized: KeyFeature[] = raw.map((item: any) =>
+              typeof item === "string"
+                ? { title: item, points: "" }
+                : item
+            );
+            setForm({ ...EMPTY_FORM, ...parsed, key_features: normalized });
           } catch {
             setForm({ ...EMPTY_FORM, ...initialData });
           }
@@ -195,7 +327,6 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
         }
       }
       setStep(0);
-      // Wait for the next tick to enable auto-saving, so we don't immediately overwrite with EMPTY_FORM
       setTimeout(() => setIsDraftLoaded(true), 50);
     } else {
       setIsDraftLoaded(false);
@@ -232,15 +363,56 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
     }
   };
 
-  const addMetric = () => setForm((f) => ({ ...f, metrics: [...f.metrics, { value: "", label: "" }] }));
-  const updateMetric = (i: number, field: "value" | "label", v: string) =>
-    setForm((f) => ({ ...f, metrics: f.metrics.map((m, idx) => idx === i ? { ...m, [field]: v } : m) }));
-  const removeMetric = (i: number) => setForm((f) => ({ ...f, metrics: f.metrics.filter((_, idx) => idx !== i) }));
+  // Key Feature helpers
+  const addFeature = () => setForm((f) => ({ ...f, key_features: [...f.key_features, { title: "", points: "" }] }));
+  const updateFeature = (i: number, field: keyof KeyFeature, v: string) =>
+    setForm((f) => ({ ...f, key_features: f.key_features.map((kf, idx) => idx === i ? { ...kf, [field]: v } : kf) }));
+  const removeFeature = (i: number) => setForm((f) => ({ ...f, key_features: f.key_features.filter((_, idx) => idx !== i) }));
 
+  // Gallery helpers
   const addGalleryItem = () => setForm((f) => ({ ...f, gallery: [...f.gallery, { url: "", caption: "" }] }));
   const updateGalleryItem = (i: number, field: "url" | "caption", v: string) =>
     setForm((f) => ({ ...f, gallery: f.gallery.map((g, idx) => idx === i ? { ...g, [field]: v } : g) }));
   const removeGalleryItem = (i: number) => setForm((f) => ({ ...f, gallery: f.gallery.filter((_, idx) => idx !== i) }));
+
+  // Upload featured image
+  const handleFeaturedFile = async (file: File) => {
+    setFeaturedUploading(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${password}` },
+        body,
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json();
+      set("featured_image", url);
+    } catch {
+      alert("Upload failed. Please try again.");
+    } finally {
+      setFeaturedUploading(false);
+    }
+  };
+
+  // Upload gallery screenshot
+  const handleGalleryUpload = async (i: number, file: File) => {
+    const body = new FormData();
+    body.append("file", file);
+    try {
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${password}` },
+        body,
+      });
+      if (!res.ok) throw new Error("Upload failed");
+      const { url } = await res.json();
+      updateGalleryItem(i, "url", url);
+    } catch {
+      alert("Upload failed. Please try again.");
+    }
+  };
 
   if (!open) return null;
 
@@ -371,52 +543,69 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
                 </>
               )}
 
-              {/* STEP 2 — Features & Metrics */}
+              {/* STEP 2 — Key Features */}
               {step === 2 && (
                 <>
-                  <div>
-                    <FieldLabel>Key Features</FieldLabel>
-                    <Textarea 
-                      id="form-features" 
-                      value={form.key_features.join("\n")} 
-                      onChange={(v) => set("key_features", v.split("\n"))} 
-                      placeholder="e.g. Customer Management Dashboard&#10;Real-time Analytics&#10;Secure Payment Gateway" 
-                      rows={5} 
-                    />
-                    <p className="text-white/25 text-xs mt-2">Enter one feature per line.</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <div>
+                      <FieldLabel>Key Features</FieldLabel>
+                      <p className="text-white/25 text-xs">Add a feature title and describe it with detailed bullet points.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addFeature}
+                      className="flex items-center gap-1.5 text-xs text-[var(--champagne)] hover:opacity-80 shrink-0"
+                    >
+                      <Plus className="w-3 h-3" /> Add Feature
+                    </button>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <FieldLabel>Metrics / Results (optional)</FieldLabel>
-                      <button type="button" onClick={addMetric} className="flex items-center gap-1.5 text-xs text-[var(--champagne)] hover:opacity-80">
-                        <Plus className="w-3 h-3" /> Add metric
-                      </button>
+                  {form.key_features.length === 0 && (
+                    <div
+                      className="rounded-2xl border border-dashed border-white/10 p-8 text-center cursor-pointer hover:border-white/20 transition-colors"
+                      onClick={addFeature}
+                    >
+                      <Plus className="w-6 h-6 text-white/20 mx-auto mb-2" />
+                      <p className="text-white/30 text-sm">Click to add your first key feature</p>
                     </div>
-                    <p className="text-white/25 text-xs mb-3">Only add real, measurable results. Leave blank if you don't have specific numbers.</p>
-                    <div className="space-y-3">
-                      {form.metrics.map((m, i) => (
-                        <div key={i} className="flex gap-3 items-center">
+                  )}
+
+                  <div className="space-y-4">
+                    {form.key_features.map((kf, i) => (
+                      <div
+                        key={i}
+                        className="rounded-2xl border border-white/8 p-4 space-y-3"
+                        style={{ background: "rgba(255,255,255,0.02)" }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-mono text-white/20 w-5 text-center">{i + 1}.</span>
                           <input
                             type="text"
-                            value={m.value}
-                            onChange={(e) => updateMetric(i, "value", e.target.value)}
-                            placeholder="40%"
-                            className="w-24 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 text-center font-display text-lg"
+                            value={kf.title}
+                            onChange={(e) => updateFeature(i, "title", e.target.value)}
+                            placeholder="Feature title, e.g. Loan Management & Financials"
+                            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white font-medium placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors"
                           />
-                          <input
-                            type="text"
-                            value={m.label}
-                            onChange={(e) => updateMetric(i, "label", e.target.value)}
-                            placeholder="Reduction in manual processes"
-                            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                          />
-                          <button type="button" onClick={() => removeMetric(i)} className="text-white/20 hover:text-red-400 transition-colors">
+                          <button
+                            type="button"
+                            onClick={() => removeFeature(i)}
+                            className="p-1.5 text-white/20 hover:text-red-400 transition-colors shrink-0"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
-                      ))}
-                    </div>
+                        <div className="pl-8">
+                          <p className="text-white/25 text-[11px] mb-1.5">Description / bullet points — one per line</p>
+                          <textarea
+                            value={kf.points}
+                            onChange={(e) => updateFeature(i, "points", e.target.value)}
+                            placeholder={"Handles loan applications and approvals\nTracks repayment schedules automatically\nGenerates financial reports in real-time"}
+                            rows={4}
+                            className="w-full bg-white/3 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white/70 placeholder:text-white/15 focus:outline-none focus:border-white/20 transition-colors resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </>
               )}
@@ -425,13 +614,42 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
               {step === 3 && (
                 <>
                   <div>
-                    <FieldLabel>Featured Image URL</FieldLabel>
-                    <Input id="form-featured-image" value={form.featured_image} onChange={(v) => set("featured_image", v)} placeholder="https://..." />
-                    {form.featured_image && (
-                      <div className="mt-3 rounded-xl overflow-hidden aspect-video">
-                        <img src={form.featured_image} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
-                      </div>
-                    )}
+                    <FieldLabel>Featured Image</FieldLabel>
+                    <input ref={featuredRef} type="file" accept="image/*" className="hidden"
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFeaturedFile(f); }} />
+                    <div className="space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => featuredRef.current?.click()}
+                        disabled={featuredUploading}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/20 transition-all disabled:opacity-50"
+                        style={{ background: "rgba(255,255,255,0.04)" }}
+                      >
+                        {featuredUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                        {featuredUploading ? "Uploading…" : "Upload Featured Image"}
+                      </button>
+                      {form.featured_image && (
+                        <div className="relative rounded-xl overflow-hidden aspect-video bg-black/40 border border-white/10">
+                          <img src={form.featured_image} alt="Featured" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
+                          <button
+                            type="button"
+                            onClick={() => set("featured_image", "")}
+                            className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white/60 hover:text-white hover:bg-black/80 transition-colors"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                      {!form.featured_image && (
+                        <div
+                          className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 aspect-video cursor-pointer hover:border-white/20 transition-colors"
+                          onClick={() => featuredRef.current?.click()}
+                        >
+                          <ImageIcon className="w-8 h-8 text-white/15 mb-2" />
+                          <p className="text-white/25 text-xs">Click to upload featured image</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div>
@@ -443,32 +661,15 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
                     </div>
                     <div className="space-y-3">
                       {form.gallery.map((img, i) => (
-                        <div key={i} className="flex gap-2 items-start bg-white/5 p-3 rounded-xl border border-white/10">
-                          <div className="flex-1 space-y-2">
-                            <input
-                              type="text"
-                              value={img.url}
-                              onChange={(e) => updateGalleryItem(i, "url", e.target.value)}
-                              placeholder="Image URL https://..."
-                              className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                            />
-                            <input
-                              type="text"
-                              value={img.caption}
-                              onChange={(e) => updateGalleryItem(i, "caption", e.target.value)}
-                              placeholder="Caption (optional)"
-                              className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                            />
-                          </div>
-                          {img.url && (
-                            <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-black/50 border border-white/10">
-                              <img src={img.url} alt="" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
-                            </div>
-                          )}
-                          <button type="button" onClick={() => removeGalleryItem(i)} className="p-2 text-white/20 hover:text-red-400 transition-colors shrink-0">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                        <GalleryRow
+                          key={i}
+                          img={img}
+                          index={i}
+                          onUpload={handleGalleryUpload}
+                          onCaptionChange={(idx, v) => updateGalleryItem(idx, "caption", v)}
+                          onRemove={removeGalleryItem}
+                          onClearUrl={(idx) => updateGalleryItem(idx, "url", "")}
+                        />
                       ))}
                     </div>
                   </div>
@@ -595,7 +796,6 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
                         { label: "Industry", value: form.industry || "—" },
                         { label: "Screenshots", value: `${form.gallery.length} image${form.gallery.length !== 1 ? "s" : ""}` },
                         { label: "Features", value: `${form.key_features.length} listed` },
-                        { label: "Metrics", value: `${form.metrics.length} defined` },
                       ].map(({ label, value }) => (
                         <div key={label} className="flex justify-between">
                           <dt className="text-white/30">{label}</dt>

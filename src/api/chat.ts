@@ -81,8 +81,11 @@ Q16. What is your estimated budget range?
 Q17. Is there anything else you'd like the website to do that we haven't discussed?
 (No options — free text)
 
-When the user has answered question 17, conclude with EXACTLY: "[CONSULTATION_COMPLETE]".
-Do not use this phrase until all 17 questions are answered.`;
+Q18. Last one! What is the best phone number or WhatsApp number we can reach you on?
+(No options — free text, collect digits only)
+
+When the user has answered question 18 (provided a phone/WhatsApp number), conclude with EXACTLY: "[CONSULTATION_COMPLETE]".
+Do not use this phrase until all 18 questions are answered.`;
 
 export async function chatHandler(request: Request, env?: any) {
   try {

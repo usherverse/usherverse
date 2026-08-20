@@ -1,0 +1,31 @@
+﻿export { createClientOnlyFn, createCsrfMiddleware, createIsomorphicFn, createMiddleware, createServerFn, createServerOnlyFn, createStart, } from '@tanstack/start-client-core';
+  createClientOnlyFn,
+  createClientOnlyFn,
+export const createFromFetch = createClientOnlyFn(
+export declare function createClientRpc(functionId: string): ((...args: Array<any>) => Promise<any>) & {
+export { createClientRpc } from './createClientRpc.js';
+export { createIsomorphicFn, createServerOnlyFn, createClientOnlyFn, type IsomorphicFn, type ServerOnlyFn, type ClientOnlyFn, type IsomorphicFnBase, } from '@tanstack/start-fn-stubs';
+import { createClientRpc } from '../client-rpc/createClientRpc'
+  fromSerializable: ({ functionId }) => createClientRpc(functionId),
+export function createClientRpc(functionId: string) {
+export { createClientRpc } from './createClientRpc'
+  createClientOnlyFn,
+export declare const createClientOnlyFn: EnvOnlyFn;
+export { createServerOnlyFn, createClientOnlyFn } from './envOnly.js';
+export const createClientOnlyFn: EnvOnlyFn = (fn) => fn
+export { createServerOnlyFn, createClientOnlyFn } from './envOnly'
+export declare const SERVER_ENV_SUGGESTIONS: readonly ["Use createClientOnlyFn(() => ...) to mark it as client-only (returns undefined on the server)", "Use createIsomorphicFn().client(() => ...).server(() => ...) to provide separate client and server implementations", "Move the client-only import out of this file into a separate .client.ts module that is not imported by any server code"];
+      : callee.name === 'createClientOnlyFn'
+  'Use createClientOnlyFn(() => ...) to mark it as client-only (returns undefined on the server)',
+    factoryNames: new Set(['createClientOnlyFn']),
+  ClientOnlyFn: /createClientOnlyFn/,
+        ['createClientOnlyFn', 'ClientOnlyFn'],
+        ['createClientOnlyFn', 'ClientOnlyFn'],
+      rootExport: 'createClientOnlyFn',
+// Template for client caller files: createClientRpc(functionId)
+  `createClientRpc(%%functionId%%)`,
+        `import { createClientRpc } from '@tanstack/${framework}-start/client-rpc'`,
+      // const myFn = createServerFn().handler(createClientRpc("id"))
+    // Also handles createIsomorphicFn, createServerOnlyFn, createClientOnlyFn, createMiddleware
+import { createClient } from "@supabase/supabase-js";
+  return createClient(url, key, { auth: { persistSession: false } });

@@ -39,7 +39,7 @@ interface Project {
   problem: string;
   solution: string;
   results?: string;
-  key_features?: string[];
+  key_features?: Array<{ title: string; points: string } | string>;
   metrics?: Metric[];
   technologies?: string[];
   featured_image?: string;
@@ -339,21 +339,41 @@ function CaseStudyPage() {
               <h2 className="font-display text-3xl font-light text-white mb-2">Key Features</h2>
               <p className="text-white/30 text-sm">What was built into this system</p>
             </motion.div>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {project.key_features.map((feature, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  className="flex items-center gap-3 p-4 rounded-2xl border border-white/6"
-                  style={{ background: "rgba(255,255,255,0.02)" }}
-                >
-                  <span className="text-[var(--champagne)] text-lg shrink-0">—</span>
-                  <span className="text-white/70 text-sm">{feature}</span>
-                </motion.div>
-              ))}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {project.key_features.map((feature, i) => {
+                // Handle both old format (string) and new format ({ title, points })
+                const isStructured = typeof feature === "object" && feature !== null;
+                const title = isStructured ? (feature as any).title : feature as string;
+                const points = isStructured ? ((feature as any).points || "") : "";
+                const bulletPoints = points.split("\n").filter((p: string) => p.trim());
+
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    className="p-5 rounded-2xl border border-white/6"
+                    style={{ background: "rgba(255,255,255,0.02)" }}
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <span className="text-[var(--champagne)] text-sm font-mono shrink-0 mt-0.5">{String(i + 1).padStart(2, "0")}.</span>
+                      <h3 className="text-white text-sm font-semibold leading-snug">{title}</h3>
+                    </div>
+                    {bulletPoints.length > 0 && (
+                      <ul className="space-y-1.5 pl-7">
+                        {bulletPoints.map((pt: string, j: number) => (
+                          <li key={j} className="flex items-start gap-2 text-white/50 text-xs leading-relaxed">
+                            <span className="text-[var(--champagne)]/60 shrink-0 mt-0.5">›</span>
+                            <span>{pt.trim()}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>

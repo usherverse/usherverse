@@ -745,9 +745,14 @@ function DetailDrawer({
     }
   };
 
-  const whatsappUrl = `https://wa.me/254110000284?text=${encodeURIComponent(
-    `Hi ${c.business_name}! Thanks for your consultation with Usherverse. We've reviewed your website requirements and would love to discuss your ${c.industry} website project. 🚀`
-  )}`;
+  const clientPhoneClean = c.phone ? c.phone.replace(/[^0-9]/g, "") : "";
+  const whatsappUrl = clientPhoneClean
+    ? `https://wa.me/${clientPhoneClean}?text=${encodeURIComponent(
+        `Hi ${c.business_name || "there"}! Thanks for your consultation with Usherverse. We've reviewed your website requirements and would love to discuss your project. 🚀`
+      )}`
+    : `https://wa.me/254110000284?text=${encodeURIComponent(
+        `Hi ${c.business_name || "there"}! Thanks for your consultation with Usherverse. We've reviewed your website requirements and would love to discuss your ${c.industry} website project. 🚀`
+      )}`;
 
   return (
     <motion.div
@@ -811,6 +816,17 @@ function DetailDrawer({
             <Layers className="w-3.5 h-3.5 text-[var(--aurora-cyan)]" /> Business Details
           </p>
           <div className="grid grid-cols-2 gap-4 text-xs">
+            <div>
+              <span className="text-white/30 block mb-1">Phone / WhatsApp</span>
+              <span className="text-white font-medium flex items-center gap-1.5">
+                <Phone className="w-3 h-3 text-emerald-400" />
+                {c.phone ? (
+                  <a href={`tel:${c.phone}`} className="hover:underline text-emerald-400 font-semibold">{c.phone}</a>
+                ) : (
+                  "Not provided"
+                )}
+              </span>
+            </div>
             <div>
               <span className="text-white/30 block mb-1">Target Audience</span>
               <span className="text-white font-medium">{c.target_audience || "N/A"}</span>

@@ -38,6 +38,26 @@ export async function adminHandler(request: Request, env?: any) {
     });
   }
 
+  // ── POST /api/admin/consultations ────────────────────────────────────────────
+  if (request.method === "POST" && url.pathname === "/api/admin/consultations") {
+    const body = await request.json() as Record<string, any>;
+    const { data, error } = await supabase
+      .from("consultations")
+      .insert([{ ...body, status: body.status ?? "new", created_at: new Date().toISOString() }])
+      .select()
+      .single();
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    return new Response(JSON.stringify(data), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   // ── PATCH /api/admin/consultations/:id ──────────────────────────────────────
   if (request.method === "PATCH" && url.pathname.startsWith("/api/admin/consultations/")) {
     const id = url.pathname.split("/").pop();
@@ -72,6 +92,43 @@ export async function adminHandler(request: Request, env?: any) {
     return new Response(JSON.stringify({ success: true }), {
       headers: { "Content-Type": "application/json" },
     });
+  }
+
+  // ── POST /api/admin/upload ──────────────────────────────────────────────────
+  if (request.method === "POST" && url.pathname === "/api/admin/upload") {
+    try {
+      const formData = await request.formData();
+      const file = formData.get("file") as File | null;
+      if (!file) {
+        return new Response(JSON.stringify({ error: "No file provided" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      const ext = file.name?.split(".").pop() || "png";
+      const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
+      const { data, error } = await supabase.storage
+        .from("projects")
+        .upload(uniqueName, uint8, { contentType: file.type || "image/png", upsert: false });
+      if (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      const { data: publicUrlData } = supabase.storage.from("projects").getPublicUrl(data.path);
+      return new Response(JSON.stringify({ url: publicUrlData.publicUrl }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (err: any) {
+      return new Response(JSON.stringify({ error: err.message ?? "Upload failed" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }
 
   // ── GET /api/admin/projects ─────────────────────────────────────────────────

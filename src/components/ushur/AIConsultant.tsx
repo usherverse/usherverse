@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, User, FileText, CheckCircle2, Copy, Download, Calendar, Check, Paperclip, ArrowUp, Mic, Square, Settings, X, Hexagon, MessageCircle } from "lucide-react";
+import { Send, Sparkles, User, FileText, CheckCircle2, Copy, Download, Calendar, Check, Paperclip, ArrowUp, Mic, Square, Settings, X, Hexagon, MessageCircle, Layers } from "lucide-react";
 import { speakFriday as speakJenny, stopFriday as stopJenny, pauseJenny, resumeJenny, isJennySpeaking } from "../../utils/speech";
 import { VoiceRecognition } from "../../utils/speechRecognition";
 import { AmbientBackground } from "./aura/AmbientBackground";
@@ -235,17 +235,62 @@ export function AIConsultant() {
     }
   };
 
+  const saveConsultation = async (spec: SpecData, chatHistory: ChatMessage[]) => {
+    // Extract phone from the last user message (which corresponds to Q18) or any user message containing numbers
+    const userMsgs = chatHistory.filter((m) => m.role === "user");
+    let phone = "";
+    if (userMsgs.length > 0) {
+      const lastUserMsg = userMsgs[userMsgs.length - 1].content.trim();
+      if (/\d+/.test(lastUserMsg)) {
+        phone = lastUserMsg;
+      }
+    }
+
+    const payload = {
+      business_name: spec.businessSummary?.businessName || "Anonymous Business",
+      industry: spec.businessSummary?.industry || "",
+      target_audience: spec.businessSummary?.targetAudience || "",
+      website_goals: spec.businessSummary?.websiteGoals || "",
+      recommended_pages: spec.recommendedPages || [],
+      recommended_features: spec.recommendedFeatures || [],
+      suggested_design_style: spec.suggestedDesignStyle || "",
+      seo_recommendations: spec.seoRecommendations || [],
+      ux_recommendations: spec.userExperienceRecommendations || [],
+      detailed_prompt: spec.detailedPrompt || "",
+      chat_history: chatHistory.map((m) => ({ role: m.role, content: m.content })),
+      phone: phone,
+      status: "new",
+    };
+
+    try {
+      await fetch("/api/admin/consultations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      console.error("Error saving consultation:", err);
+    }
+  };
+
   const generateSpec = async (chatHistory: ChatMessage[]) => {
     setIsGeneratingSpec(true);
     try {
       const response = await fetch("/api/generate-spec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: chatHistory.map(m => ({ role: m.role, content: m.content })) }),
+        body: JSON.stringify({ messages: chatHistory.map((m) => ({ role: m.role, content: m.content })) }),
       });
-      if (response.ok) setSpecData(await response.json());
-    } catch (e) { console.error(e); }
-    finally { setIsGeneratingSpec(false); }
+      if (response.ok) {
+        const data = await response.json();
+        setSpecData(data);
+        saveConsultation(data, chatHistory);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsGeneratingSpec(false);
+    }
   };
 
   const toggleOption = (option: string, isMultiSelect: boolean) => {
