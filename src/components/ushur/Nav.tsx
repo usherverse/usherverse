@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 
 const LINKS = [
   { label: "Home", href: "#top" },
@@ -13,6 +13,8 @@ const LINKS = [
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
@@ -33,10 +35,14 @@ export function Nav() {
     e.preventDefault();
     setMenuOpen(false);
     setTimeout(() => {
-      window.history.pushState(null, '', href);
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+      if (location.pathname !== "/") {
+        window.location.href = "/" + href;
+      } else {
+        window.history.pushState(null, '', href);
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }, 150); // wait for menu to start closing and overflow to reset
   };
@@ -53,7 +59,7 @@ export function Nav() {
       >
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
-          <a href="#top" className="font-display text-xl tracking-tight z-50 relative">
+          <a href="#top" onClick={(e) => handleNavClick(e, "#top")} className="font-display text-xl tracking-tight z-50 relative">
             Usherverse<span className="text-[var(--champagne)]">.</span>
           </a>
 

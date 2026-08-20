@@ -16,11 +16,15 @@ function checkAuth(event: any): boolean {
 }
 
 // GET  /api/admin/consultations
+// POST /api/admin/consultations
 // PATCH /api/admin/consultations/:id
 // DELETE /api/admin/consultations/:id
 
 export default defineEventHandler(async (event) => {
-  if (!checkAuth(event)) {
+  const method = event.node.req.method || "GET";
+
+  // Require auth for GET, PATCH, DELETE, but NOT for POST (public users create consultations)
+  if (method !== "POST" && !checkAuth(event)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -38,7 +42,41 @@ export default defineEventHandler(async (event) => {
   }
 
   const url = new URL(event.node.req.url!, `http://${event.node.req.headers.host}`);
-  const method = event.node.req.method || "GET";
+
+  // POST /api/admin/consultations
+  if (method === "POST") {
+    const body = await readBody(event);
+    const { data, error } = await supabase
+      .from("consultations")
+      .insert({
+        status: body.status || "new",
+        business_name: body.business_name,
+        industry: body.industry,
+        target_audience: body.target_audience,
+        website_goals: body.website_goals,
+        recommended_pages: body.recommended_pages,
+        recommended_features: body.recommended_features,
+        suggested_design_style: body.suggested_design_style,
+        seo_recommendations: body.seo_recommendations,
+        ux_recommendations: body.ux_recommendations,
+        detailed_prompt: body.detailed_prompt,
+        chat_history: body.chat_history,
+        phone: body.phone,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify(data), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   // GET /api/admin/consultations
   if (method === "GET") {

@@ -184,7 +184,10 @@ export function AIConsultant() {
       const { cleanText, options, isMultiSelect } = parseMessage(text);
 
       if (text.includes("[CONSULTATION_COMPLETE]")) {
-        const clean = cleanText.replace("[CONSULTATION_COMPLETE]", "").trim();
+        let clean = cleanText.replace("[CONSULTATION_COMPLETE]", "").trim();
+        if (!clean.toLowerCase().includes("received")) {
+          clean = "Thank you! We have received the response and we are going to reach out within 24 hours. " + clean;
+        }
         setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: clean }]);
         setLatestAssistantId(assistantId);
         setIsConsultationComplete(true);
@@ -553,7 +556,7 @@ export function AIConsultant() {
                 </div>
                 <h3 className="text-2xl font-bold mb-3">Consultation Complete!</h3>
                 <p className="text-black/60 text-[15px] mb-8 max-w-md mx-auto leading-relaxed">
-                  Thank you! We have received your response for <strong className="text-black">{specData.businessSummary.businessName}</strong>. Our team will get back to you within 24 hours.
+                  Thank you! We have received the response for <strong className="text-black">{specData.businessSummary.businessName}</strong> and we are going to reach out within 24 hours.
                 </p>
                 
                 {/* Actions */}
