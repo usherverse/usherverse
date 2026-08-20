@@ -36,7 +36,14 @@ export function Nav() {
     setMenuOpen(false);
     setTimeout(() => {
       if (location.pathname !== "/") {
-        window.location.href = "/" + href;
+        navigate({ to: "/", hash: href.replace("#", "") }).then(() => {
+          setTimeout(() => {
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 100);
+        });
       } else {
         window.history.pushState(null, '', href);
         const target = document.querySelector(href);
