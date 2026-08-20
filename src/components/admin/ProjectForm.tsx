@@ -116,11 +116,11 @@ function Select({ id, value, onChange, options }: {
       id={id}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white/25 transition-colors"
+      className="w-full bg-[#161616] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white/25 transition-colors"
       style={{ colorScheme: "dark" }}
     >
-      <option value="">Select…</option>
-      {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      <option value="" className="bg-[#161616] text-white">Select…</option>
+      {options.map((o) => <option key={o} value={o} className="bg-[#161616] text-white">{o}</option>)}
     </select>
   );
 }
