@@ -176,9 +176,6 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<ProjectFormData>({ ...EMPTY_FORM, ...initialData });
   const [saving, setSaving] = useState(false);
-  const [newFeature, setNewFeature] = useState("");
-  const [newGalleryUrl, setNewGalleryUrl] = useState("");
-  const [newGalleryCaption, setNewGalleryCaption] = useState("");
   const [isDraftLoaded, setIsDraftLoaded] = useState(false);
 
   useEffect(() => {
@@ -240,14 +237,10 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
     setForm((f) => ({ ...f, metrics: f.metrics.map((m, idx) => idx === i ? { ...m, [field]: v } : m) }));
   const removeMetric = (i: number) => setForm((f) => ({ ...f, metrics: f.metrics.filter((_, idx) => idx !== i) }));
 
-  const addFeature = () => {
-    if (newFeature.trim()) {
-      setForm((f) => ({ ...f, key_features: [...f.key_features, newFeature.trim()] }));
-      setNewFeature("");
-    }
-  };
-
-  const addGalleryItem = () => {
+  const addGalleryItem = () => setForm((f) => ({ ...f, gallery: [...f.gallery, { url: "", caption: "" }] }));
+  const updateGalleryItem = (i: number, field: "url" | "caption", v: string) =>
+    setForm((f) => ({ ...f, gallery: f.gallery.map((g, idx) => idx === i ? { ...g, [field]: v } : g) }));
+  const removeGalleryItem = (i: number) => setForm((f) => ({ ...f, gallery: f.gallery.filter((_, idx) => idx !== i) }));
     if (newGalleryUrl.trim()) {
       setForm((f) => ({ ...f, gallery: [...f.gallery, { url: newGalleryUrl.trim(), caption: newGalleryCaption.trim() }] }));
       setNewGalleryUrl("");
@@ -389,31 +382,14 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
                 <>
                   <div>
                     <FieldLabel>Key Features</FieldLabel>
-                    <div className="flex gap-2 mb-3">
-                      <input
-                        id="form-feature-input"
-                        type="text"
-                        value={newFeature}
-                        onChange={(e) => setNewFeature(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addFeature(); } }}
-                        placeholder="e.g. Customer Management Dashboard"
-                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                      />
-                      <button type="button" onClick={addFeature} className="px-4 py-2.5 rounded-xl bg-white/8 hover:bg-white/12 text-white/60 hover:text-white text-sm transition-colors">
-                        Add
-                      </button>
-                    </div>
-                    <div className="space-y-2">
-                      {form.key_features.map((f, i) => (
-                        <div key={i} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/4 border border-white/6">
-                          <span className="text-[var(--champagne)] text-sm">—</span>
-                          <span className="text-white/70 text-sm flex-1">{f}</span>
-                          <button type="button" onClick={() => setForm((fm) => ({ ...fm, key_features: fm.key_features.filter((_, idx) => idx !== i) }))} className="text-white/20 hover:text-red-400 transition-colors">
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                    <Textarea 
+                      id="form-features" 
+                      value={form.key_features.join("\n")} 
+                      onChange={(v) => set("key_features", v.split("\n"))} 
+                      placeholder="e.g. Customer Management Dashboard&#10;Real-time Analytics&#10;Secure Payment Gateway" 
+                      rows={5} 
+                    />
+                    <p className="text-white/25 text-xs mt-2">Enter one feature per line.</p>
                   </div>
 
                   <div>
@@ -465,45 +441,42 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
                   </div>
 
                   <div>
-                    <FieldLabel>Gallery Screenshots</FieldLabel>
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                      <input
-                        type="text"
-                        value={newGalleryUrl}
-                        onChange={(e) => setNewGalleryUrl(e.target.value)}
-                        placeholder="Image URL https://..."
-                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                      />
-                      <input
-                        type="text"
-                        value={newGalleryCaption}
-                        onChange={(e) => setNewGalleryCaption(e.target.value)}
-                        placeholder="Caption (optional)"
-                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
-                      />
+                    <div className="flex items-center justify-between mb-3">
+                      <FieldLabel>Gallery Screenshots</FieldLabel>
+                      <button type="button" onClick={addGalleryItem} className="flex items-center gap-1.5 text-xs text-[var(--champagne)] hover:opacity-80">
+                        <Plus className="w-3 h-3" /> Add Screenshot
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      id="add-gallery-image"
-                      onClick={addGalleryItem}
-                      className="w-full py-2 rounded-xl border border-white/10 border-dashed text-white/30 hover:text-white/60 hover:border-white/25 text-sm transition-colors flex items-center justify-center gap-2"
-                    >
-                      <Plus className="w-4 h-4" /> Add Screenshot
-                    </button>
-                    {form.gallery.length > 0 && (
-                      <div className="mt-3 grid grid-cols-3 gap-2">
-                        {form.gallery.map((img, i) => (
-                          <div key={i} className="relative group aspect-video rounded-xl overflow-hidden border border-white/8">
-                            <img src={img.url} alt={img.caption} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                              <button type="button" onClick={() => setForm((f) => ({ ...f, gallery: f.gallery.filter((_, idx) => idx !== i) }))} className="text-red-400">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
+                    <div className="space-y-3">
+                      {form.gallery.map((img, i) => (
+                        <div key={i} className="flex gap-2 items-start bg-white/5 p-3 rounded-xl border border-white/10">
+                          <div className="flex-1 space-y-2">
+                            <input
+                              type="text"
+                              value={img.url}
+                              onChange={(e) => updateGalleryItem(i, "url", e.target.value)}
+                              placeholder="Image URL https://..."
+                              className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
+                            />
+                            <input
+                              type="text"
+                              value={img.caption}
+                              onChange={(e) => updateGalleryItem(i, "caption", e.target.value)}
+                              placeholder="Caption (optional)"
+                              className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-white/25"
+                            />
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          {img.url && (
+                            <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-black/50 border border-white/10">
+                              <img src={img.url} alt="" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
+                            </div>
+                          )}
+                          <button type="button" onClick={() => removeGalleryItem(i)} className="p-2 text-white/20 hover:text-red-400 transition-colors shrink-0">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div>
