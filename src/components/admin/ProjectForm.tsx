@@ -179,6 +179,7 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
   const [newFeature, setNewFeature] = useState("");
   const [newGalleryUrl, setNewGalleryUrl] = useState("");
   const [newGalleryCaption, setNewGalleryCaption] = useState("");
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -197,15 +198,19 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
         }
       }
       setStep(0);
+      // Wait for the next tick to enable auto-saving, so we don't immediately overwrite with EMPTY_FORM
+      setTimeout(() => setIsDraftLoaded(true), 50);
+    } else {
+      setIsDraftLoaded(false);
     }
   }, [open, initialData]);
 
   // Auto-save draft to localStorage if creating new project
   useEffect(() => {
-    if (open && !initialData?.id) {
+    if (open && !initialData?.id && isDraftLoaded) {
       localStorage.setItem("usherverse_project_draft", JSON.stringify(form));
     }
-  }, [form, open, initialData?.id]);
+  }, [form, open, initialData?.id, isDraftLoaded]);
 
   // Auto-generate slug from title
   useEffect(() => {
