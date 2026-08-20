@@ -112,12 +112,14 @@ export async function chatHandler(request: Request, env?: any) {
 
     try {
       const { text } = await generateText({
-        model: groqProvider("llama-3.3-70b-versatile"),
+        model: groqProvider("qwen/qwen3.6-27b"),
         system: systemPrompt,
         messages: modelMessages,
       });
 
-      return new Response(text, {
+      let responseText = text.replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+
+      return new Response(responseText, {
         headers: { "Content-Type": "text/plain; charset=utf-8" },
       });
     } catch (primaryError: any) {
@@ -135,12 +137,14 @@ export async function chatHandler(request: Request, env?: any) {
         // Auto-retry once with the new key
         const fallbackProvider = createGroq({ apiKey: apiKeys[currentKeyIndex] });
         const { text } = await generateText({
-          model: fallbackProvider("llama-3.3-70b-versatile"),
+          model: fallbackProvider("qwen/qwen3.6-27b"),
           system: systemPrompt,
           messages: modelMessages,
         });
 
-        return new Response(text, {
+        let fallbackResponseText = text.replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+
+        return new Response(fallbackResponseText, {
           headers: { "Content-Type": "text/plain; charset=utf-8" },
         });
       }
