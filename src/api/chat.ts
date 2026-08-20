@@ -27,6 +27,7 @@ CRITICAL RULES:
    The user may click one of these options, type their own answer, OR type "skip"/"pass".
 6. For free-text questions (like business name), do NOT include [OPTIONS: ...].
 7. BE EXTREMELY CONCISE. Do not give long explanations or wordy transitions. Acknowledge their previous answer (or skip) in 1 short sentence max, then ask the next question immediately.
+8. NEVER output internal thoughts, reasoning, plans, or state checks. Do NOT write things like "Wait, the current state is..." or "Plan: 1...". Provide ONLY the final response that the user will see.
 
 THE QUESTIONNAIRE:
 
@@ -119,7 +120,7 @@ export async function chatHandler(request: Request, env?: any) {
         messages: modelMessages,
       });
 
-      let responseText = text.replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+      let responseText = text.replace(/<think>[\s\S]*?(<\/think>|$)\n*/g, '').trim();
 
       return new Response(responseText, {
         headers: { "Content-Type": "text/plain; charset=utf-8" },
@@ -144,7 +145,7 @@ export async function chatHandler(request: Request, env?: any) {
           messages: modelMessages,
         });
 
-        let fallbackResponseText = text.replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+        let fallbackResponseText = text.replace(/<think>[\s\S]*?(<\/think>|$)\n*/g, '').trim();
 
         return new Response(fallbackResponseText, {
           headers: { "Content-Type": "text/plain; charset=utf-8" },
