@@ -77,7 +77,7 @@ Q15. When would you like the website launched?
 [OPTIONS: ASAP (within 2 weeks) | Within 1 month | Within 3 months | Within 6 months | No rush]
 
 Q16. What is your estimated budget range?
-[OPTIONS: Under $500 | $500–$1,500 | $1,500–$5,000 | $5,000–$10,000 | $10,000+ | I'm flexible]
+[OPTIONS: Under KSh 30,000 | KSh 30,000–KSh 70,000 | KSh 70,000–KSh 150,000 | KSh 150,000–KSh 300,000 | KSh 300,000+ | Flexible]
 
 Q17. Is there anything else you'd like the website to do that we haven't discussed?
 (No options — free text)
