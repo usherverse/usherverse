@@ -289,23 +289,38 @@ export function AIConsultant() {
       const element = document.getElementById('spec-content');
       if (!element) return;
       
-      const opt = {
-        margin:       10,
-        filename:     'Usherverse_Specification.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+      const { toPng } = await import('html-to-image');
+      const { jsPDF } = await import('jspdf');
 
-      // @ts-ignore
-      const html2pdf = (await import('html2pdf.js')).default;
-      await html2pdf().set(opt).from(element).save();
+      // Use html-to-image which safely handles modern CSS colors unlike html2canvas
+      const dataUrl = await toPng(element, { 
+        quality: 0.98,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff'
+      });
+      
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      const imgProps = pdf.getImageProperties(dataUrl);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      
+      // Calculate margins
+      const margin = 10;
+      const printWidth = pdfWidth - (margin * 2);
+      const printHeight = (imgProps.height * printWidth) / imgProps.width;
+
+      pdf.addImage(dataUrl, 'PNG', margin, margin, printWidth, printHeight);
+      pdf.save('Usherverse_Specification.pdf');
 
       // Open WhatsApp with pre-filled message
       // Note: You can replace '1234567890' with the actual Usherverse business WhatsApp number 
       // by changing the URL to https://wa.me/1234567890?text=...
       const message = encodeURIComponent(`Hi Usherverse! Here are my website requirements. I've attached the PDF specification to this chat.`);
-      window.open(`https://wa.me/?text=${message}`, '_blank');
+      window.open(`https://wa.me/254110000284?text=${message}`, '_blank');
       
     } catch (err) {
       console.error("Error generating PDF:", err);
@@ -487,57 +502,94 @@ export function AIConsultant() {
 
             {/* Spec Card */}
             {specData && (
-              <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="bg-white text-black rounded-2xl p-6 mt-4 shadow-xl">
-                <div id="spec-content">
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-black/10">
-                    <FileText className="w-6 h-6" />
-                    <div>
-                      <h3 className="text-lg font-semibold">Website Specification</h3>
-                      <p className="text-black/50 text-xs">Generated for {specData.businessSummary.businessName}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-5 text-sm">
-                    <div className="grid grid-cols-2 gap-3 bg-gray-50 p-4 rounded-xl">
-                      <div><span className="text-black/40 text-xs block">Industry</span>{specData.businessSummary.industry}</div>
-                      <div><span className="text-black/40 text-xs block">Audience</span>{specData.businessSummary.targetAudience}</div>
-                      <div className="col-span-2"><span className="text-black/40 text-xs block">Goals</span>{specData.businessSummary.websiteGoals}</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-5">
-                      <div>
-                        <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-2">Pages</p>
-                        <ul className="space-y-1">{specData.recommendedPages.map((p, i) => <li key={i} className="flex gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />{p}</li>)}</ul>
-                      </div>
-                      <div>
-                        <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-2">Features</p>
-                        <ul className="space-y-1">{specData.recommendedFeatures.map((f, i) => <li key={i} className="flex gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-blue-500 mt-0.5 shrink-0" />{f}</li>)}</ul>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-2">Design Direction</p>
-                      <p className="bg-orange-50 border border-orange-100 p-3 rounded-lg text-black/70">{specData.suggestedDesignStyle}</p>
-                    </div>
-                    <div className="relative group html2pdf__page-break">
-                      <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-2">AI Builder Prompt</p>
-                      <pre className="bg-gray-900 text-gray-300 p-4 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap font-mono">{specData.detailedPrompt}</pre>
-                      <button onClick={handleCopyPrompt} className="absolute top-8 right-3 bg-white/10 hover:bg-white/20 p-1.5 rounded-lg text-white opacity-0 group-hover:opacity-100 transition-opacity" data-html2canvas-ignore>
-                        <Copy className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
+              <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="bg-white text-black rounded-3xl p-8 mt-4 shadow-2xl text-center relative overflow-hidden">
+                <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 className="w-10 h-10" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Consultation Complete!</h3>
+                <p className="text-black/60 text-[15px] mb-8 max-w-md mx-auto leading-relaxed">
+                  We've gathered all the necessary details to build a stunning website for <strong className="text-black">{specData.businessSummary.businessName}</strong>. Our expert team has been notified and is ready to begin.
+                </p>
+                
+                {/* Actions */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button onClick={handleWhatsAppShare} disabled={isGeneratingPdf} className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-lg shadow-[#25D366]/20">
+                    <MessageCircle className="w-5 h-5" />
+                    {isGeneratingPdf ? "Generating PDF..." : "Chat on WhatsApp"}
+                  </button>
+                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-black hover:bg-black/80 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/10">
+                    <Calendar className="w-5 h-5" />Book Project
+                  </button>
                 </div>
                 
-                {/* Actions (Not included in PDF) */}
-                <div className="flex flex-wrap gap-3 pt-6 mt-6 border-t border-black/10">
-                  <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium transition-colors">
-                    <Download className="w-3.5 h-3.5" />Export JSON
-                  </button>
-                  <button onClick={handleWhatsAppShare} disabled={isGeneratingPdf} className="flex items-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-lg text-xs font-medium transition-colors disabled:opacity-50">
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    {isGeneratingPdf ? "Generating PDF..." : "Send to WhatsApp"}
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2.5 bg-black hover:bg-black/80 text-white rounded-lg text-xs font-medium transition-colors ml-auto">
-                    <Calendar className="w-3.5 h-3.5" />Book Project
-                  </button>
+                {/* Hidden content for PDF generation only */}
+                <div className="absolute left-[-9999px] top-[-9999px]">
+                  <div id="spec-content" className="w-[800px] bg-white text-black p-10 font-sans">
+                    <div className="flex items-center gap-4 mb-8 pb-6 border-b border-black/10">
+                      <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-white">
+                        <Sparkles className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold tracking-tight">Website Specification</h3>
+                        <p className="text-black/50 text-sm mt-1">Generated for {specData.businessSummary.businessName}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-8">
+                      <div className="grid grid-cols-2 gap-4 bg-gray-50 p-6 rounded-2xl">
+                        <div>
+                          <span className="text-black/40 text-xs font-bold uppercase tracking-wider block mb-1.5">Industry</span>
+                          <div className="font-medium text-black/90">{specData.businessSummary.industry}</div>
+                        </div>
+                        <div>
+                          <span className="text-black/40 text-xs font-bold uppercase tracking-wider block mb-1.5">Target Audience</span>
+                          <div className="font-medium text-black/90">{specData.businessSummary.targetAudience}</div>
+                        </div>
+                        <div className="col-span-2 mt-2">
+                          <span className="text-black/40 text-xs font-bold uppercase tracking-wider block mb-1.5">Primary Goals</span>
+                          <div className="font-medium text-black/90 leading-relaxed">{specData.businessSummary.websiteGoals}</div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-8">
+                        <div>
+                          <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-4 flex items-center gap-2">
+                            <FileText className="w-4 h-4" /> Recommended Pages
+                          </p>
+                          <ul className="space-y-3">
+                            {specData.recommendedPages.map((p, i) => (
+                              <li key={i} className="flex gap-3 items-start text-sm font-medium text-black/80">
+                                <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                <span>{p}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-4 flex items-center gap-2">
+                            <Layers className="w-4 h-4" /> Key Features
+                          </p>
+                          <ul className="space-y-3">
+                            {specData.recommendedFeatures.map((f, i) => (
+                              <li key={i} className="flex gap-3 items-start text-sm font-medium text-black/80">
+                                <CheckCircle2 className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
+                                <span>{f}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-black/5">
+                        <p className="text-xs uppercase tracking-widest text-black/40 font-bold mb-4 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4" /> Design Direction
+                        </p>
+                        <p className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100/50 p-5 rounded-2xl text-black/80 text-sm leading-relaxed font-medium">
+                          {specData.suggestedDesignStyle}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
