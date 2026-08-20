@@ -37,7 +37,7 @@ export async function generateSpecHandler(request: Request, env?: any) {
       .join("\n\n");
 
     const { object } = await generateObject({
-      model: groqProvider("openai/gpt-oss-20b"),
+      model: groqProvider("llama-3.3-70b-versatile"),
       mode: "json",
       schema: specSchema,
       prompt: `Based on the following website consultation conversation, generate a detailed website specification.
