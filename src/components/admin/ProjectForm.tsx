@@ -58,7 +58,7 @@ const EMPTY_FORM: ProjectFormData = {
 const STEPS = [
   { id: "basic", label: "Basic Info" },
   { id: "problem", label: "Problem → Solution" },
-  { id: "features", label: "Features & Metrics" },
+  { id: "features", label: "Key Features" },
   { id: "media", label: "Media" },
   { id: "links", label: "Links & Tech" },
   { id: "publish", label: "Publish" },
