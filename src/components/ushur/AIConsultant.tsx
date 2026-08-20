@@ -389,7 +389,7 @@ export function AIConsultant() {
             Website Discovery <span className="text-[var(--champagne)] italic">Questionnaire</span>
           </h1>
           <p className="text-white/50 text-sm max-w-lg mx-auto">
-            Jenny will guide you through a series of questions and generate a full specification for your new site.
+            Jenny will guide you through a series of questions and generate a full specification for your new site. You can skip any question by typing "skip" or "pass".
           </p>
         </motion.div>
 
@@ -426,8 +426,8 @@ export function AIConsultant() {
                 <div className="scale-[1.5] origin-center mb-4"><OrbMark /></div>
                 <div>
                   <h2 className="text-foreground text-xl font-medium mb-2">Ready to plan your website?</h2>
-                  <p className="text-muted-foreground text-sm max-w-sm">
-                    Jenny will ask you a few targeted questions and generate a comprehensive blueprint for your new site.
+                  <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
+                    Jenny will ask you a few targeted questions and generate a comprehensive blueprint for your new site. You can type <strong className="text-white">"skip"</strong> or <strong className="text-white">"pass"</strong> at any time to skip a question.
                   </p>
                 </div>
                 <button
