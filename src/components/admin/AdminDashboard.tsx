@@ -5,6 +5,7 @@ import { AdminSidebar } from "./AdminSidebar";
 import { AdminTopNav } from "./AdminTopNav";
 import { DashboardView } from "./views/DashboardView";
 import { ConsultationsView } from "./views/ConsultationsView";
+import { ProjectsView } from "./views/ProjectsView";
 import { CommandPalette } from "./CommandPalette";
 
 export interface Consultation {
@@ -82,7 +83,7 @@ export function AdminDashboard({ onLogout, password }: { onLogout: () => void; p
   const VIEW_TITLES: Record<AdminView, { title: string; subtitle: string }> = {
     dashboard: { title: "Dashboard", subtitle: "Welcome back to Usherverse HQ" },
     consultations: { title: "Consultations", subtitle: "All website discovery sessions from clients" },
-    projects: { title: "Projects", subtitle: "Active client projects" },
+    projects: { title: "Projects", subtitle: "Portfolio — Problems I've Solved" },
     messages: { title: "Messages", subtitle: "Client communications" },
     analytics: { title: "Analytics", subtitle: "Business performance insights" },
     settings: { title: "Settings", subtitle: "Admin panel configuration" },
@@ -145,7 +146,10 @@ export function AdminDashboard({ onLogout, password }: { onLogout: () => void; p
                   onRefresh={fetchConsultations}
                 />
               )}
-              {(currentView === "projects" || currentView === "messages" || currentView === "analytics" || currentView === "settings") && (
+              {currentView === "projects" && (
+                <ProjectsView password={password} />
+              )}
+              {(currentView === "messages" || currentView === "analytics" || currentView === "settings") && (
                 <PlaceholderView view={currentView} />
               )}
             </motion.div>

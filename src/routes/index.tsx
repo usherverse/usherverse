@@ -7,6 +7,7 @@ import { Hero } from "@/components/ushur/Hero";
 import { About } from "@/components/ushur/About";
 import { Services } from "@/components/ushur/Services";
 // import { Work } from "@/components/ushur/Work";
+import { ProblemsSection } from "@/components/ushur/ProblemsSection";
 import { Process } from "@/components/ushur/Process";
 import { Stack } from "@/components/ushur/Stack";
 import { Blog } from "@/components/ushur/Blog";
@@ -48,6 +49,11 @@ function Index() {
 
         <LazySection minHeight="600px" id="services">
           <Services />
+        </LazySection>
+
+        {/* Problems I've Solved — dynamic portfolio section */}
+        <LazySection minHeight="700px" id="work">
+          <ProblemsSection />
         </LazySection>
 
         {/* <LazySection minHeight="600px"><Work /></LazySection> */}

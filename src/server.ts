@@ -40,6 +40,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 import { chatHandler } from "./api/chat";
 import { generateSpecHandler } from "./api/generate-spec";
 import { adminHandler } from "./api/admin";
+import { projectsHandler } from "./api/projects";
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
@@ -53,6 +54,9 @@ export default {
       }
       if (url.pathname.startsWith("/api/admin")) {
         return await adminHandler(request, env);
+      }
+      if (url.pathname.startsWith("/api/projects")) {
+        return await projectsHandler(request, env);
       }
 
       const handler = await getServerEntry();

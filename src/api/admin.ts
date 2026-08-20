@@ -1,5 +1,9 @@
 import { getSupabaseAdmin } from "../lib/supabase";
 
+function generateSlug(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
 export async function adminHandler(request: Request, env?: any) {
   const envObj = env || (typeof process !== "undefined" ? process.env : {});
   const adminPassword = (envObj.ADMIN_PASSWORD as string) || "Onlyme@2024";
@@ -68,6 +72,58 @@ export async function adminHandler(request: Request, env?: any) {
     return new Response(JSON.stringify({ success: true }), {
       headers: { "Content-Type": "application/json" },
     });
+  }
+
+  // ── GET /api/admin/projects ─────────────────────────────────────────────────
+  if (request.method === "GET" && url.pathname === "/api/admin/projects") {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false });
+    if (error) return new Response(JSON.stringify([]), { status: 200, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+  }
+
+  // ── POST /api/admin/projects ─────────────────────────────────────────────────
+  if (request.method === "POST" && url.pathname === "/api/admin/projects") {
+    const body = await request.json() as Record<string, any>;
+    if (!body.slug && body.title) body.slug = generateSlug(body.title);
+    const { data, error } = await supabase
+      .from("projects")
+      .insert([{ ...body, updated_at: new Date().toISOString() }])
+      .select().single();
+    if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify(data), { status: 201, headers: { "Content-Type": "application/json" } });
+  }
+
+  // ── GET /api/admin/projects/:id ──────────────────────────────────────────────
+  if (request.method === "GET" && url.pathname.match(/^\/api\/admin\/projects\/[^/]+$/)) {
+    const id = url.pathname.split("/").pop();
+    const { data, error } = await supabase.from("projects").select("*").eq("id", id).single();
+    if (error) return new Response(JSON.stringify({ error: error.message }), { status: 404, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+  }
+
+  // ── PATCH /api/admin/projects/:id ────────────────────────────────────────────
+  if (request.method === "PATCH" && url.pathname.startsWith("/api/admin/projects/")) {
+    const id = url.pathname.split("/").pop();
+    const body = await request.json() as Record<string, any>;
+    if (body.title && !body.slug) body.slug = generateSlug(body.title);
+    const { data, error } = await supabase
+      .from("projects")
+      .update({ ...body, updated_at: new Date().toISOString() })
+      .eq("id", id).select().single();
+    if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+  }
+
+  // ── DELETE /api/admin/projects/:id ───────────────────────────────────────────
+  if (request.method === "DELETE" && url.pathname.startsWith("/api/admin/projects/")) {
+    const id = url.pathname.split("/").pop();
+    const { error } = await supabase.from("projects").delete().eq("id", id);
+    if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ success: true }), { headers: { "Content-Type": "application/json" } });
   }
 
   return new Response(JSON.stringify({ error: "Not found" }), {
