@@ -241,12 +241,6 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
   const updateGalleryItem = (i: number, field: "url" | "caption", v: string) =>
     setForm((f) => ({ ...f, gallery: f.gallery.map((g, idx) => idx === i ? { ...g, [field]: v } : g) }));
   const removeGalleryItem = (i: number) => setForm((f) => ({ ...f, gallery: f.gallery.filter((_, idx) => idx !== i) }));
-    if (newGalleryUrl.trim()) {
-      setForm((f) => ({ ...f, gallery: [...f.gallery, { url: newGalleryUrl.trim(), caption: newGalleryCaption.trim() }] }));
-      setNewGalleryUrl("");
-      setNewGalleryCaption("");
-    }
-  };
 
   if (!open) return null;
 
