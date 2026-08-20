@@ -79,13 +79,12 @@ export function Nav() {
             ))}
           </nav>
 
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
+          <Link
+            to="/ai-consultant"
             className="hidden md:inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] border-b border-[var(--foreground)] pb-1 hover:text-[var(--champagne)] hover:border-[var(--champagne)] transition-colors"
           >
             Start a project →
-          </a>
+          </Link>
 
           {/* Mobile hamburger */}
           <button
@@ -173,17 +172,19 @@ export function Nav() {
               ))}
             </nav>
 
-            {/* CTA at bottom */}
-            <motion.a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.5 }}
-              className="mt-10 inline-flex items-center justify-center gap-3 bg-[var(--champagne)] text-white px-8 py-5 text-xs uppercase tracking-[0.3em] hover:opacity-90 transition-opacity"
             >
-              Start a project →
-            </motion.a>
+              <Link
+                to="/ai-consultant"
+                onClick={() => setMenuOpen(false)}
+                className="mt-10 inline-flex items-center justify-center gap-3 bg-[var(--champagne)] text-white px-8 py-5 text-xs uppercase tracking-[0.3em] hover:opacity-90 transition-opacity"
+              >
+                Start a project →
+              </Link>
+            </motion.div>
 
             {/* Corner label */}
             <motion.p

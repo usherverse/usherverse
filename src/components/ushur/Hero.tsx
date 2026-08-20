@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useVideoPause } from "@/hooks/use-video-pause";
 
 const SLIDES = [
@@ -107,10 +108,10 @@ export function Hero() {
             transition={{ duration: 1, delay: 1.3 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <a href="#contact" className="group inline-flex items-center justify-center gap-3 bg-[var(--ink)] text-[var(--bone)] px-8 py-5 text-xs uppercase tracking-[0.3em] hover:bg-[var(--champagne)] hover:text-[var(--ink)] transition-all duration-500">
+            <Link to="/ai-consultant" className="group inline-flex items-center justify-center gap-3 bg-[var(--ink)] text-[var(--bone)] px-8 py-5 text-xs uppercase tracking-[0.3em] hover:bg-[var(--champagne)] hover:text-[var(--ink)] transition-all duration-500">
               Let's build something
               <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </a>
+            </Link>
           </motion.div>
         </div>
 

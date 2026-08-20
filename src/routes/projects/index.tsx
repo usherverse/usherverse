@@ -252,14 +252,14 @@ function ProjectsPage() {
             <h2 className="font-display text-3xl font-light text-white mb-2">Have a problem to solve?</h2>
             <p className="text-white/35 text-sm">Let's talk about what you need built.</p>
           </div>
-          <a
-            href="/#contact"
+          <Link
+            to="/ai-consultant"
             id="projects-contact-cta"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-sm font-medium text-black shrink-0 transition-all hover:scale-105"
             style={{ background: "linear-gradient(135deg, var(--champagne), oklch(0.7 0.3 22))" }}
           >
             Start a conversation <ArrowUpRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </section>
 
