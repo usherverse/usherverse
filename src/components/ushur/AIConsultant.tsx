@@ -553,7 +553,7 @@ export function AIConsultant() {
                 </div>
                 <h3 className="text-2xl font-bold mb-3">Consultation Complete!</h3>
                 <p className="text-black/60 text-[15px] mb-8 max-w-md mx-auto leading-relaxed">
-                  We've gathered all the necessary details to build a stunning website for <strong className="text-black">{specData.businessSummary.businessName}</strong>. Our expert team has been notified and is ready to begin.
+                  Thank you! We have received your response for <strong className="text-black">{specData.businessSummary.businessName}</strong>. Our team will get back to you within 24 hours.
                 </p>
                 
                 {/* Actions */}

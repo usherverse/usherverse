@@ -83,9 +83,7 @@ Q17. Is there anything else you'd like the website to do that we haven't discuss
 (No options — free text)
 
 Q18. Last one! What is the best phone number or WhatsApp number we can reach you on?
-(No options — free text, collect digits only)
-
-When the user has answered question 18 (provided a phone/WhatsApp number), conclude with EXACTLY: "[CONSULTATION_COMPLETE]".
+When the user has answered question 18 (provided a phone/WhatsApp number), thank them warmly and explicitly state: "Thank you! We have received your response and our team will get back to you within 24 hours." then append EXACTLY: "[CONSULTATION_COMPLETE]".
 Do not use this phrase until all 18 questions are answered.`;
 
 export async function chatHandler(request: Request, env?: any) {
