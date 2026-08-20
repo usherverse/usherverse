@@ -182,10 +182,30 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
 
   useEffect(() => {
     if (open) {
-      setForm({ ...EMPTY_FORM, ...initialData });
+      if (initialData?.id) {
+        setForm({ ...EMPTY_FORM, ...initialData });
+      } else {
+        const draft = localStorage.getItem("usherverse_project_draft");
+        if (draft) {
+          try {
+            setForm({ ...EMPTY_FORM, ...JSON.parse(draft) });
+          } catch {
+            setForm({ ...EMPTY_FORM, ...initialData });
+          }
+        } else {
+          setForm({ ...EMPTY_FORM, ...initialData });
+        }
+      }
       setStep(0);
     }
   }, [open, initialData]);
+
+  // Auto-save draft to localStorage if creating new project
+  useEffect(() => {
+    if (open && !initialData?.id) {
+      localStorage.setItem("usherverse_project_draft", JSON.stringify(form));
+    }
+  }, [form, open, initialData?.id]);
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -201,6 +221,9 @@ export function ProjectForm({ open, onClose, onSave, initialData }: Props) {
     setSaving(true);
     try {
       await onSave(form);
+      if (!initialData?.id) {
+        localStorage.removeItem("usherverse_project_draft");
+      }
       onClose();
     } finally {
       setSaving(false);
