@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useLocation } from "@tanstack/react-router";
 import { X, ArrowUp, Mic, Paperclip } from "lucide-react";
 import { VoiceRecognition } from "../../utils/speechRecognition";
 import { speakFriday as speakJenny, stopFriday as stopJenny, pauseJenny, resumeJenny, isJennySpeaking } from "../../utils/speech";
@@ -93,6 +94,9 @@ function TypewriterText({ text, animate, onUpdate }: { text: string, animate: bo
 }
 
 export function FloatingChat() {
+  const location = useLocation();
+  const isConsultationPage = location.pathname === "/ai-consultant" || location.pathname.startsWith("/admin");
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ id: string; role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
@@ -299,6 +303,8 @@ export function FloatingChat() {
     e.preventDefault();
     submitMessage(input, "text");
   };
+
+  if (isConsultationPage) return null;
 
   return (
     <>
